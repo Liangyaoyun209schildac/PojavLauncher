@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -22,15 +21,12 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 
 import com.kdt.mcgui.ProgressLayout;
-import com.kdt.mcgui.mcAccountSpinner;
 
 import net.kdt.pojavlaunch.fragments.MainMenuFragment;
-import net.kdt.pojavlaunch.fragments.MicrosoftLoginFragment;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
 
-import net.kdt.pojavlaunch.fragments.SelectAuthFragment;
 import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
@@ -47,86 +43,39 @@ public class LauncherActivity extends BaseActivity {
     private final int REQUEST_STORAGE_REQUEST_CODE = 1;
     private final Object mLockStoragePerm = new Object();
 
-
-    private mcAccountSpinner mAccountSpinner;
     private FragmentContainerView mFragmentView;
-    private ImageButton mSettingsButton, mDeleteAccountButton;
     private ProgressLayout mProgressLayout;
     private ProgressServiceKeeper mProgressServiceKeeper;
 
-    /* Allows to switch from one button "type" to another */
-    private final FragmentManager.FragmentLifecycleCallbacks mFragmentCallbackListener = new FragmentManager.FragmentLifecycleCallbacks() {
-        @Override
-        public void onFragmentResumed(@NonNull FragmentManager fm, @NonNull Fragment f) {
-            mSettingsButton.setImageDrawable(ContextCompat.getDrawable(getBaseContext(), f instanceof MainMenuFragment
-                    ? R.drawable.ic_menu_settings : R.drawable.ic_menu_home));
-        }
-    };
-
     /* Listener for the back button in settings */
     private final ExtraListener<String> mBackPreferenceListener = (key, value) -> {
-        if(value.equals("true")) onBackPressed();
+        if (value.equals("true")) onBackPressed();
         return false;
     };
-
-    /* Listener for the auth method selection screen */
-    private final ExtraListener<Boolean> mSelectAuthMethod = (key, value) -> {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(mFragmentView.getId());
-        // Allow starting the add account only from the main menu, should it be moved to fragment itself ?
-        if(!(fragment instanceof MainMenuFragment)) return false;
-
-        Tools.swapFragment(this, SelectAuthFragment.class, SelectAuthFragment.TAG, true, null);
-        return false;
-    };
-
-    /* Listener for the settings fragment */
-    private final View.OnClickListener mSettingButtonListener = v -> {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(mFragmentView.getId());
-        if(fragment instanceof MainMenuFragment){
-            Tools.swapFragment(this, LauncherPreferenceFragment.class, SETTING_FRAGMENT_TAG, true, null);
-        } else{
-            // The setting button doubles as a home button now
-            while(!(getSupportFragmentManager().findFragmentById(mFragmentView.getId()) instanceof MainMenuFragment)){
-                getSupportFragmentManager().popBackStackImmediate();
-            }
-        }
-    };
-
-    /* Listener for account deletion */
-    private final View.OnClickListener mAccountDeleteButtonListener = v -> new AlertDialog.Builder(this)
-            .setMessage(R.string.warning_remove_account)
-            .setPositiveButton(android.R.string.cancel, null)
-            .setNeutralButton(R.string.global_delete, (dialog, which) -> mAccountSpinner.removeCurrentAccount())
-            .show();
 
     private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
-        if(mProgressLayout.hasProcesses()){
+        if (mProgressLayout.hasProcesses()) {
             Toast.makeText(this, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        String selectedProfile = LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_PROFILE,"");
-        if (LauncherProfiles.mainProfileJson == null || !LauncherProfiles.mainProfileJson.profiles.containsKey(selectedProfile)){
+        String selectedProfile = LauncherPreferences.DEFAULT_PREF.getString(LauncherPreferences.PREF_KEY_CURRENT_PROFILE, "");
+        if (LauncherProfiles.mainProfileJson == null || !LauncherProfiles.mainProfileJson.profiles.containsKey(selectedProfile)) {
             Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
             return false;
         }
         MinecraftProfile prof = LauncherProfiles.mainProfileJson.profiles.get(selectedProfile);
-        if (prof == null || prof.lastVersionId == null || "Unknown".equals(prof.lastVersionId)){
+        if (prof == null || prof.lastVersionId == null || "Unknown".equals(prof.lastVersionId)) {
             Toast.makeText(this, R.string.error_no_version, Toast.LENGTH_LONG).show();
             return false;
         }
 
-        if(mAccountSpinner.getSelectedAccount() == null){
-            Toast.makeText(this, R.string.no_saved_accounts, Toast.LENGTH_LONG).show();
-            ExtraCore.setValue(ExtraConstants.SELECT_AUTH_METHOD, true);
-            return false;
-        }
         String normalizedVersionId = AsyncMinecraftDownloader.normalizeVersionId(prof.lastVersionId);
         JMinecraftVersionList.Version mcVersion = AsyncMinecraftDownloader.getListedVersion(normalizedVersionId);
         new AsyncMinecraftDownloader(this, mcVersion, normalizedVersionId, new AsyncMinecraftDownloader.DoneListener() {
             @Override
             public void onDownloadDone() {
-                ProgressKeeper.waitUntilDone(()-> runOnUiThread(() -> {
+                ProgressKeeper.waitUntilDone(() -> runOnUiThread(() -> {
                     try {
                         Intent mainIntent = new Intent(getBaseContext(), MainActivity.class);
                         mainIntent.putExtra(INTENT_MINECRAFT_VERSION, normalizedVersionId);
@@ -142,7 +91,7 @@ public class LauncherActivity extends BaseActivity {
 
             @Override
             public void onDownloadFailed(Throwable th) {
-                if(th != null) Tools.showError(LauncherActivity.this, R.string.mc_download_failed, th);
+                if (th != null) Tools.showError(LauncherActivity.this, R.string.mc_download_failed, th);
             }
         });
         return false;
@@ -157,11 +106,8 @@ public class LauncherActivity extends BaseActivity {
         ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
         askForStoragePermission(); // Will wait here
 
-        mSettingsButton.setOnClickListener(mSettingButtonListener);
-        mDeleteAccountButton.setOnClickListener(mAccountDeleteButtonListener);
         ProgressKeeper.addTaskCountListener(mProgressLayout);
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
-        ExtraCore.addExtraListener(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
 
         ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
 
@@ -180,49 +126,26 @@ public class LauncherActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        getSupportFragmentManager().registerFragmentLifecycleCallbacks(mFragmentCallbackListener, true);
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         mProgressLayout.cleanUpObservers();
         ProgressKeeper.removeTaskCountListener(mProgressLayout);
         ProgressKeeper.removeTaskCountListener(mProgressServiceKeeper);
         ExtraCore.removeExtraListenerFromValue(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
-        ExtraCore.removeExtraListenerFromValue(ExtraConstants.SELECT_AUTH_METHOD, mSelectAuthMethod);
         ExtraCore.removeExtraListenerFromValue(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
-
-        getSupportFragmentManager().unregisterFragmentLifecycleCallbacks(mFragmentCallbackListener);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode != RESULT_OK) return;
-        if(requestCode == Tools.RUN_MOD_INSTALLER && data != null){
+        if (resultCode != RESULT_OK) return;
+        if (requestCode == Tools.RUN_MOD_INSTALLER && data != null) {
             Tools.launchModInstaller(this, data);
             return;
         }
-        if(requestCode == MultiRTConfigDialog.MULTIRT_PICK_RUNTIME && data != null){
+        if (requestCode == MultiRTConfigDialog.MULTIRT_PICK_RUNTIME && data != null) {
             Tools.installRuntimeFromUri(this, data.getData());
         }
-    }
-
-    /** Custom implementation to feel more natural when a backstack isn't present */
-    @Override
-    public void onBackPressed() {
-        MicrosoftLoginFragment fragment = (MicrosoftLoginFragment) getVisibleFragment(MicrosoftLoginFragment.TAG);
-        if(fragment != null){
-            if(fragment.canGoBack()){
-                fragment.goBack();
-                return;
-            }
-        }
-
-        super.onBackPressed();
     }
 
     @Override
@@ -231,24 +154,24 @@ public class LauncherActivity extends BaseActivity {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private Fragment getVisibleFragment(String tag){
+    private Fragment getVisibleFragment(String tag) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if(fragment != null && fragment.isVisible()) {
+        if (fragment != null && fragment.isVisible()) {
             return fragment;
         }
         return null;
     }
 
     @SuppressWarnings("unused")
-    private Fragment getVisibleFragment(int id){
+    private Fragment getVisibleFragment(int id) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(id);
-        if(fragment != null && fragment.isVisible()) {
+        if (fragment != null && fragment.isVisible()) {
             return fragment;
         }
         return null;
     }
 
-    private void askForStoragePermission(){
+    private void askForStoragePermission() {
         int revokeCount = 0;
         while (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 29 && !isStorageAllowed()) { //Do not ask for storage at all on Android 10+
             try {
@@ -286,23 +209,20 @@ public class LauncherActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_STORAGE_REQUEST_CODE){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE_REQUEST_CODE) {
             synchronized (mLockStoragePerm) {
                 mLockStoragePerm.notifyAll();
             }
         }
     }
 
-    /** Stuff all the view boilerplate here */
-    private void bindViews(){
+    /**
+     * Stuff all the view boilerplate here
+     */
+    private void bindViews() {
         mFragmentView = findViewById(R.id.container_fragment);
-        mSettingsButton = findViewById(R.id.setting_button);
-        mDeleteAccountButton = findViewById(R.id.delete_account_button);
-        mAccountSpinner = findViewById(R.id.account_spinner);
         mProgressLayout = findViewById(R.id.progress_layout);
     }
-
-
-
 
 }

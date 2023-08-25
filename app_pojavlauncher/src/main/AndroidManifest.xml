@@ -101,7 +101,13 @@
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation|uiMode"
             android:launchMode="standard"
             android:process=":game"
-            android:screenOrientation="sensorLandscape" />
+            android:exported="true"
+            android:screenOrientation="sensorLandscape" >
+            <intent-filter>
+                <action android:name="ColorMC.Minecraft" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name=".scoped.FolderProvider"
