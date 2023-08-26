@@ -99,15 +99,6 @@ public class LauncherActivity extends BaseActivity {
         LauncherPreferences.computeNotchSize(this);
     }
 
-    @SuppressWarnings("SameParameterValue")
-    private Fragment getVisibleFragment(String tag) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-        if (fragment != null && fragment.isVisible()) {
-            return fragment;
-        }
-        return null;
-    }
-
     @SuppressWarnings("unused")
     private Fragment getVisibleFragment(int id) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(id);
@@ -115,16 +106,6 @@ public class LauncherActivity extends BaseActivity {
             return fragment;
         }
         return null;
-    }
-
-    private boolean isStorageAllowed() {
-        //Getting the permission status
-        int result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int result2 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-
-        //If permission is granted returning true
-        return result1 == PackageManager.PERMISSION_GRANTED &&
-                result2 == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestStoragePermission() {
