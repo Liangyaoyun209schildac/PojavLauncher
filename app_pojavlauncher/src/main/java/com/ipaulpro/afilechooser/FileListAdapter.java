@@ -19,9 +19,10 @@ package com.ipaulpro.afilechooser;
 import android.content.*;
 import android.view.*;
 import android.widget.*;
+import net.kdt.pojavview.R;
+
 import java.io.*;
 import java.util.*;
-import net.kdt.pojavlaunch.*;
 
 /**
  * List adapter for Files.

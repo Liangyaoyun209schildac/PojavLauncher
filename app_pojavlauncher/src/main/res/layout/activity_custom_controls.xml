@@ -13,7 +13,7 @@
 		android:layout_width="wrap_content">
 
 
-		<net.kdt.pojavlaunch.customcontrols.handleview.DrawerPullButton
+		<net.kdt.pojavview.customcontrols.handleview.DrawerPullButton
 			android:id="@+id/drawer_button"
 			android:layout_width="32dp"
 			android:layout_height="16dp"
@@ -30,12 +30,12 @@
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
 
-		<net.kdt.pojavlaunch.customcontrols.ControlLayout
+		<net.kdt.pojavview.customcontrols.ControlLayout
 			android:id="@+id/customctrl_controllayout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
-		</net.kdt.pojavlaunch.customcontrols.ControlLayout>
+		</net.kdt.pojavview.customcontrols.ControlLayout>
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

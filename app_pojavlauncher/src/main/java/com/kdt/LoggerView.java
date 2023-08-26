@@ -13,8 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import net.kdt.pojavlaunch.Logger;
-import net.kdt.pojavlaunch.R;
+import net.kdt.pojavview.Logger;
+import net.kdt.pojavview.R;
 
 /**
  * A class able to display logs to the user.

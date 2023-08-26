@@ -1,12 +1,11 @@
 package com.kdt.mcgui;
 
 import android.content.*;
-import android.graphics.*;
 import android.util.*;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import net.kdt.pojavlaunch.R;
+import net.kdt.pojavview.R;
 
 public class MineButton extends androidx.appcompat.widget.AppCompatButton {
 	

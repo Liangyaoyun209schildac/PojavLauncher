@@ -77,7 +77,7 @@ configurations {
 }
 
 android {
-    namespace 'net.kdt.pojavlaunch'
+    namespace 'net.kdt.pojavview'
 
     compileSdk = 33
 
@@ -101,7 +101,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "net.kdt.pojavlaunch"
+        applicationId "net.kdt.pojavview"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode getDateSeconds()
@@ -116,9 +116,9 @@ android {
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             //signingConfig signingConfigs.customDebug
-            resValue 'string', 'application_package', 'net.kdt.pojavlaunch.debug'
-            resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder.debug'
-            resValue 'string', 'shareProviderAuthority', 'net.kdt.pojavlaunch.scoped.controlfolder.debug'
+            resValue 'string', 'application_package', 'net.kdt.pojavview.debug'
+            resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavview.scoped.gamefolder.debug'
+            resValue 'string', 'shareProviderAuthority', 'net.kdt.pojavview.scoped.controlfolder.debug'
         }
         proguard {
             initWith debug
@@ -133,8 +133,8 @@ android {
             // defaultConfig already set
             // multiDexEnabled = true
             // debuggable = true
-            resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder'
-            resValue 'string', 'application_package', 'net.kdt.pojavlaunch'
+            resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavview.scoped.gamefolder'
+            resValue 'string', 'application_package', 'net.kdt.pojavview'
         }
 //        gplay {
 //            initWith release
