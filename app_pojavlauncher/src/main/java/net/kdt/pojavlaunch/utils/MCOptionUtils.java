@@ -32,11 +32,8 @@ public class MCOptionUtils {
         void onOptionChanged();
     }
 
-
     public static void load(){
-        load(sOptionFolderPath == null
-                ? Tools.DIR_GAME_NEW
-                : sOptionFolderPath);
+        load(sOptionFolderPath);
     }
 
     public static void load(@NonNull String folderPath) {

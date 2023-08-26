@@ -9,9 +9,4 @@ public class ExtraConstants {
     public static final String OPEN_GL_VERSION = "open_gl_version";
     /* ExtraCore constant: Selected file or folder, as a String */
     public static final String FILE_SELECTOR = "file_selector";
-    /* ExtraCore Constant: When we want to launch the game */
-    public static final String LAUNCH_GAME = "launch_game";
-
-
-
 }

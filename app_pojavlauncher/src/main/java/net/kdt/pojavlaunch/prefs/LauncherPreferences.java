@@ -16,7 +16,6 @@ import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.utils.JREUtils;
 
 public class LauncherPreferences {
-    public static final String PREF_KEY_CURRENT_PROFILE = "currentProfile";
     public static SharedPreferences DEFAULT_PREF;
     public static String PREF_RENDERER = "opengles2";
 
@@ -31,14 +30,11 @@ public class LauncherPreferences {
 	public static float PREF_MOUSESCALE = 100f;
 	public static int PREF_LONGPRESS_TRIGGER = 300;
 	public static String PREF_DEFAULTCTRL_PATH = Tools.CTRLDEF_FILE;
-	public static String PREF_CUSTOM_JAVA_ARGS;
     public static boolean PREF_FORCE_ENGLISH = false;
-    public static final String PREF_VERSION_REPOS = "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json";
     public static boolean PREF_CHECK_LIBRARY_SHA = true;
     public static boolean PREF_DISABLE_GESTURES = false;
     public static boolean PREF_DISABLE_SWAP_HAND = false;
     public static float PREF_MOUSESPEED = 1f;
-    public static int PREF_RAM_ALLOCATION;
     public static String PREF_DEFAULT_RUNTIME;
     public static boolean PREF_SUSTAINED_PERFORMANCE = false;
     public static boolean PREF_VIRTUAL_MOUSE_START = false;
@@ -84,8 +80,6 @@ public class LauncherPreferences {
         PREF_CHECK_LIBRARY_SHA = DEFAULT_PREF.getBoolean("checkLibraries",true);
         PREF_DISABLE_GESTURES = DEFAULT_PREF.getBoolean("disableGestures",false);
         PREF_DISABLE_SWAP_HAND = DEFAULT_PREF.getBoolean("disableDoubleTap", false);
-        PREF_RAM_ALLOCATION = DEFAULT_PREF.getInt("allocation", findBestRAMAllocation(ctx));
-        PREF_CUSTOM_JAVA_ARGS = DEFAULT_PREF.getString("javaArgs", "");
         PREF_SUSTAINED_PERFORMANCE = DEFAULT_PREF.getBoolean("sustainedPerformance", false);
         PREF_VIRTUAL_MOUSE_START = DEFAULT_PREF.getBoolean("mouse_start", false);
         PREF_ARC_CAPES = DEFAULT_PREF.getBoolean("arc_capes",false);
@@ -104,14 +98,6 @@ public class LauncherPreferences {
         PREF_DEADZONE_SCALE = DEFAULT_PREF.getInt("gamepad_deadzone_scale", 100)/100f;
         PREF_BIG_CORE_AFFINITY = DEFAULT_PREF.getBoolean("bigCoreAffinity", false);
 
-        String argLwjglLibname = "-Dorg.lwjgl.opengl.libname=";
-        for (String arg : JREUtils.parseJavaArguments(PREF_CUSTOM_JAVA_ARGS)) {
-            if (arg.startsWith(argLwjglLibname)) {
-                // purge arg
-                DEFAULT_PREF.edit().putString("javaArgs",
-                    PREF_CUSTOM_JAVA_ARGS.replace(arg, "")).apply();
-            }
-        }
         if(DEFAULT_PREF.contains("defaultRuntime")) {
             PREF_DEFAULT_RUNTIME = DEFAULT_PREF.getString("defaultRuntime","");
         }else{

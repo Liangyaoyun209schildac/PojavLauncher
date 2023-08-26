@@ -8,6 +8,7 @@ import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.Tools.shareLog;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
 
+import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
 import android.os.Build;
@@ -33,7 +34,7 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
 public class JREUtils {
-    private JREUtils() {}
+    public JREUtils() {}
 
     public static String LD_LIBRARY_PATH;
     public static String jvmLibraryPath;
@@ -266,7 +267,8 @@ public class JREUtils {
         // return ldLibraryPath;
     }
 
-    public static int launchJavaVM(final Activity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
+    @SuppressLint("StringFormatInvalid")
+    public static int launchJavaVM(final Activity activity, final Runtime runtime, String gameDirectory, final List<String> JVMArgs) throws Throwable {
         String runtimeHome = MultiRTUtils.getRuntimeHome(runtime.name).getAbsolutePath();
 
         JREUtils.relocateLibPath(runtime, runtimeHome);
@@ -274,7 +276,7 @@ public class JREUtils {
         setJavaEnvironment(activity, runtimeHome);
 
         final String graphicsLib = loadGraphicsLibrary();
-        List<String> userArgs = getJavaArgs(activity, runtimeHome, userArgsString);
+        List<String> userArgs = getJavaArgs(runtimeHome, gameDirectory);
 
         //Remove arguments that can interfere with the good working of the launcher
         purgeArg(userArgs,"-Xms");
@@ -288,18 +290,22 @@ public class JREUtils {
         purgeArg(userArgs, "-Dorg.lwjgl.opengl.libname");
 
         //Add automatically generated args
-        userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
-        userArgs.add("-Xmx" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
         if(LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
 
         userArgs.addAll(JVMArgs);
-        activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
-        System.out.println(JVMArgs);
 
         initJavaRuntime(runtimeHome);
         setupExitTrap(activity.getApplication());
-        chdir(gameDirectory == null ? Tools.DIR_GAME_NEW : gameDirectory.getAbsolutePath());
+        chdir(gameDirectory);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
+
+        Logger.appendToLog("Set Launch Args:");
+        for (String item : userArgs)
+        {
+            Logger.appendToLog(item);
+        }
+
+        Logger.appendToLog("");
 
         final int exitCode = VMLauncher.launchJVM(userArgs.toArray(new String[0]));
         Logger.appendToLog("Java Exit code: " + exitCode);
@@ -321,11 +327,9 @@ public class JREUtils {
     /**
      *  Gives an argument list filled with both the user args
      *  and the auto-generated ones (eg. the window resolution).
-     * @param ctx The application context
      * @return A list filled with args.
      */
-    public static List<String> getJavaArgs(Context ctx, String runtimeHome, String userArgumentsString) {
-        List<String> userArguments = parseJavaArguments(userArgumentsString);
+    public static List<String> getJavaArgs(String runtimeHome, String gamedir) {
         String resolvFile;
         resolvFile = new File(Tools.DIR_DATA,"resolv.conf").getAbsolutePath();
 
@@ -337,7 +341,7 @@ public class JREUtils {
                 "-Duser.language=" + System.getProperty("user.language"),
                 "-Dos.name=Linux",
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,
-                "-Dpojav.path.minecraft=" + Tools.DIR_GAME_NEW,
+                "-Dpojav.path.minecraft=" + gamedir,
                 "-Dpojav.path.private.account=" + Tools.DIR_ACCOUNT_NEW,
                 "-Duser.timezone=" + TimeZone.getDefault().getID(),
 
@@ -359,25 +363,8 @@ public class JREUtils {
         if(LauncherPreferences.PREF_ARC_CAPES) {
             overridableArguments.add("-javaagent:"+new File(Tools.DIR_DATA,"arc_dns_injector/arc_dns_injector.jar").getAbsolutePath()+"=23.95.137.176");
         }
-        List<String> additionalArguments = new ArrayList<>();
-        for(String arg : overridableArguments) {
-            String strippedArg = arg.substring(0,arg.indexOf('='));
-            boolean add = true;
-            for(String uarg : userArguments) {
-                if(uarg.startsWith(strippedArg)) {
-                    add = false;
-                    break;
-                }
-            }
-            if(add)
-                additionalArguments.add(arg);
-            else
-                Log.i("ArgProcessor","Arg skipped: "+arg);
-        }
 
-        //Add all the arguments
-        userArguments.addAll(additionalArguments);
-        return userArguments;
+        return overridableArguments;
     }
 
     /**

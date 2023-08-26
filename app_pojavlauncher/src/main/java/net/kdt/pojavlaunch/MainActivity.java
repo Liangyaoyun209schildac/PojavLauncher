@@ -52,18 +52,16 @@ import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.services.GameService;
 import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
-import net.kdt.pojavlaunch.value.MinecraftAccount;
-import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
 import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import org.lwjgl.glfw.CallbackBridge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable {
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
-    public static final String INTENT_MINECRAFT_VERSION = "intent_version";
 
     volatile public static boolean isInputStackCall;
 
@@ -88,10 +86,44 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        new JREUtils();
 
+        minecraftProfile = new MinecraftProfile();
+        Intent intent = getIntent();
+        minecraftProfile.gameDir = intent.getStringExtra("GAME_DIR");
+        minecraftProfile.jvmArgs = intent.getStringArrayExtra("JVM_ARGS");
+        minecraftProfile.gameArgs = intent.getStringArrayExtra("GAME_ARGS");
+        minecraftProfile.version = intent.getStringExtra("GAME_VERSION");
+        minecraftProfile.time = intent.getStringExtra("GAME_TIME");
+        minecraftProfile.jvmVersion = intent.getStringExtra("JVM_VERSION");
+        minecraftProfile.mainclass = intent.getStringExtra("MAINCLASS");
+        minecraftProfile.classpath = intent.getStringExtra("CLASSPATH");
+        minecraftProfile.v2 = intent.getBooleanExtra("GAME_V2", false);
 
-        minecraftProfile = LauncherProfiles.getCurrentProfile();
-        MCOptionUtils.load(Tools.getGameDirPath(minecraftProfile).getAbsolutePath());
+//        StringBuilder arg1 = new StringBuilder();
+//        for (String item: minecraftProfile.jvmArgs) {
+//            arg1.append(item).append("\n");
+//        }
+//
+//        StringBuilder arg2 = new StringBuilder();
+//        for (String item: minecraftProfile.gameArgs) {
+//            arg2.append(item).append("\n");
+//        }
+//
+//        File crashFile = new File(Tools.DIR_DATA, "latestcrash.txt");
+//        FatalErrorActivity.showError(this, crashFile.getAbsolutePath(), true, new Exception(
+//                "GAME_DIR:" + minecraftProfile.gameDir + "\n" +
+//                        "GAME_VERSION:" + minecraftProfile.version + "\n" +
+//                        "GAME_TIME:" + minecraftProfile.time + "\n" +
+//                        "JVM_VERSION:" + minecraftProfile.jvmVersion + "\n" +
+//                        "MAINCLASS:" + minecraftProfile.mainclass + "\n" +
+//                        "CLASSPATH:" + minecraftProfile.classpath + "\n" +
+//                        "GAME_V2:" + minecraftProfile.v2 + "\n" +
+//                        "JAVA_ARG:" + arg1 + "\n" +
+//                        "GAME_ARG:" + arg2
+//        ));
+
+        MCOptionUtils.load(minecraftProfile.gameDir);
         GameService.startService(this);
         initLayout(R.layout.activity_basemain);
         CallbackBridge.addGrabListener(touchpad);
@@ -148,21 +180,15 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                 Tools.LOCAL_RENDERER = minecraftProfile.pojavRendererName;
             }
 
-            setTitle("Minecraft " + minecraftProfile.lastVersionId);
+            setTitle("Minecraft " + minecraftProfile.version);
 
             // Minecraft 1.13+
-
-            String version = getIntent().getStringExtra(INTENT_MINECRAFT_VERSION);
-            version = version == null ? minecraftProfile.lastVersionId : version;
-
-            JMinecraftVersionList.Version mVersionInfo = Tools.getVersionInfo(version);
-            isInputStackCall = mVersionInfo.arguments != null;
+            isInputStackCall = minecraftProfile.v2;
             CallbackBridge.nativeSetUseInputStackQueue(isInputStackCall);
 
             Tools.getDisplayMetrics(this);
             windowWidth = Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, 1f);
             windowHeight = Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, 1f);
-
 
             // Menu
             gameActionArrayAdapter = new ArrayAdapter<>(this,
@@ -183,7 +209,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             drawerLayout.closeDrawers();
 
 
-            final String finalVersion = version;
+            final String finalVersion = minecraftProfile.version;
             minecraftGLView.setSurfaceReadyListener(() -> {
                 try {
                     // Setup virtual mouse right before launching
@@ -191,7 +217,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                         touchpad.post(() -> touchpad.switchState());
                     }
 
-                    runCraft(finalVersion, mVersionInfo);
+                    runCraft(finalVersion);
                 }catch (Throwable e){
                     Tools.showError(getApplicationContext(), e, true);
                 }
@@ -319,30 +345,38 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         return Build.VERSION.SDK_INT >= 26;
     }
 
-    private void runCraft(String versionId, JMinecraftVersionList.Version version) throws Throwable {
+    private void runCraft(String versionId) throws Throwable {
         if(Tools.LOCAL_RENDERER == null) {
             Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
         }
-        MinecraftAccount minecraftAccount = PojavProfile.getCurrentProfileContent(this, null);
         Logger.appendToLog("--------- beginning with launcher debug");
-        printLauncherInfo(versionId, Tools.isValidString(minecraftProfile.javaArgs) ? minecraftProfile.javaArgs : LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
+        printLauncherInfo(versionId, minecraftProfile);
         if (Tools.LOCAL_RENDERER.equals("vulkan_zink")) {
             checkVulkanZinkIsSupported();
         }
         JREUtils.redirectAndPrintJRELog();
-        LauncherProfiles.update();
-        int requiredJavaVersion = 8;
-        if(version.javaVersion != null) requiredJavaVersion = version.javaVersion.majorVersion;
-        Tools.launchMinecraft(this, minecraftAccount, minecraftProfile, versionId, requiredJavaVersion);
+        Tools.launchMinecraft(this, minecraftProfile);
     }
 
-    private void printLauncherInfo(String gameVersion, String javaArguments) {
+    private void printLauncherInfo(String gameVersion, MinecraftProfile profile) {
         Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(Tools.DEVICE_ARCHITECTURE));
-        Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " +Build.MODEL);
+        Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " + Build.MODEL);
         Logger.appendToLog("Info: API version: " + Build.VERSION.SDK_INT);
         Logger.appendToLog("Info: Selected Minecraft version: " + gameVersion);
-        Logger.appendToLog("Info: Custom Java arguments: \"" + javaArguments + "\"");
+        Logger.appendToLog("Info: Game arguments: " + profile.gameArgs.length);
+        for (String item : profile.gameArgs) {
+            Logger.appendToLog(item);
+        }
+
+        Logger.appendToLog("Info: Java arguments: " + profile.jvmArgs.length);
+        for (String item : profile.jvmArgs) {
+            Logger.appendToLog(item);
+        }
+        Logger.appendToLog("Info: MainClass: " + profile.mainclass);
+        Logger.appendToLog("Info: ClassPath: " + profile.classpath);
+        Logger.appendToLog("Info: Game Dir: " + profile.gameDir);
+        Logger.appendToLog("Info: Jvm Version: " + profile.jvmVersion);
     }
 
     private void checkVulkanZinkIsSupported() {

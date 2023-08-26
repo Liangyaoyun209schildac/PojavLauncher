@@ -6,8 +6,6 @@ import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import net.kdt.pojavlaunch.value.MinecraftAccount;
-
 public class PojavProfile {
 	private static final String PROFILE_PREF = "pojav_profile";
 	private static final String PROFILE_PREF_FILE = "file";
@@ -15,10 +13,6 @@ public class PojavProfile {
 	public static SharedPreferences getPrefs(Context ctx) {
 		return ctx.getSharedPreferences(PROFILE_PREF, Context.MODE_PRIVATE);
 	}
-
-    public static MinecraftAccount getCurrentProfileContent(@NonNull Context ctx, @Nullable String profileName) {
-        return MinecraftAccount.load(profileName == null ? getCurrentProfileName(ctx) : profileName);
-    }
 
     public static String getCurrentProfileName(Context ctx) {
         String name = getPrefs(ctx).getString(PROFILE_PREF_FILE, "");

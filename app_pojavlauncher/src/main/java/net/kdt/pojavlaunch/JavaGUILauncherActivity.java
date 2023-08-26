@@ -313,7 +313,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
             Logger.appendToLog("Info: Java arguments: " + Arrays.toString(javaArgList.toArray(new String[0])));
 
-            return JREUtils.launchJavaVM(this, runtime,null,javaArgList, LauncherPreferences.PREF_CUSTOM_JAVA_ARGS);
+            return JREUtils.launchJavaVM(this, runtime, getIntent().getStringExtra("GAME_DIR"),javaArgList);
         } catch (Throwable th) {
             Tools.showError(this, th, true);
             return -1;
