@@ -2,8 +2,8 @@
 // Created by maks on 24.09.2022.
 //
 
-#ifndef POJAVLAUNCHER_ENVIRON_H
-#define POJAVLAUNCHER_ENVIRON_H
+#ifndef POJAVVIEW_ENVIRON_H
+#define POJAVVIEW_ENVIRON_H
 
 #include <ctxbridges/gl_bridge.h>
 #include <stdatomic.h>
@@ -74,4 +74,4 @@ struct pojav_environ_s {
 };
 extern struct pojav_environ_s *pojav_environ;
 
-#endif //POJAVLAUNCHER_ENVIRON_H
+#endif //POJAVVIEW_ENVIRON_H

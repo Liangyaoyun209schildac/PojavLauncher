@@ -24,40 +24,6 @@ public class AsyncAssetManager {
 
     private AsyncAssetManager(){}
 
-    /**
-     * Attempt to install the java 8 runtime, if necessary
-     * @param am App context
-     */
-    public static void unpackRuntime(AssetManager am) {
-        /* Check if JRE is included */
-        String rt_version = null;
-        String current_rt_version = MultiRTUtils.__internal__readBinpackVersion("Internal");
-        try {
-            rt_version = Tools.read(am.open("components/jre/version"));
-        } catch (IOException e) {
-            Log.e("JREAuto", "JRE was not included on this APK.", e);
-        }
-        String exactJREName = MultiRTUtils.getExactJreName(8);
-        if(current_rt_version == null && exactJREName != null && !exactJREName.equals("Internal")/*this clause is for when the internal runtime is goofed*/) return;
-        if(rt_version == null) return;
-        if(rt_version.equals(current_rt_version)) return;
-
-        // Install the runtime in an async manner, hope for the best
-        String finalRt_version = rt_version;
-        sExecutorService.execute(() -> {
-
-            try {
-                MultiRTUtils.installRuntimeNamedBinpack(
-                        am.open("components/jre/universal.tar.xz"),
-                        am.open("components/jre/bin-" + archAsString(Tools.DEVICE_ARCHITECTURE) + ".tar.xz"),
-                        "Internal", finalRt_version);
-                MultiRTUtils.postPrepare("Internal");
-            }catch (IOException e) {
-                Log.e("JREAuto", "Internal JRE unpack failed", e);
-            }
-        });
-    }
-
     /** Unpack single files, with no regard to version tracking */
     public static void unpackSingleFiles(Context ctx){
         ProgressLayout.setProgress(ProgressLayout.EXTRACT_SINGLE_FILES, 0);
@@ -84,7 +50,6 @@ public class AsyncAssetManager {
                 unpackComponent(ctx, "lwjgl3", false);
                 unpackComponent(ctx, "security", true);
                 unpackComponent(ctx, "arc_dns_injector", true);
-                unpackComponent(ctx, "forge_installer", true);
             } catch (IOException e) {
                 Log.e("AsyncAssetManager", "Failed o unpack components !",e );
             }

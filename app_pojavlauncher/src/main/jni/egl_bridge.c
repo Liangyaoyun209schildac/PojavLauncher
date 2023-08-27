@@ -638,7 +638,7 @@ void pojavTerminate() {
     }
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, jclass clazz, jobject surface) {
+JNIEXPORT void JNICALL Java_net_kdt_pojavview_utils_JREUtils_setupBridgeWindow(JNIEnv* env, jclass clazz, jobject surface) {
     pojav_environ->pojavWindow = ANativeWindow_fromSurface(env, surface);
     if(pojav_environ->config_renderer == RENDERER_GL4ES) {
         gl_setup_window();
@@ -647,7 +647,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow
 
 
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_utils_JREUtils_releaseBridgeWindow(JNIEnv *env, jclass clazz) {
+Java_net_kdt_pojavview_utils_JREUtils_releaseBridgeWindow(JNIEnv *env, jclass clazz) {
     ANativeWindow_release(pojav_environ->pojavWindow);
 }
 

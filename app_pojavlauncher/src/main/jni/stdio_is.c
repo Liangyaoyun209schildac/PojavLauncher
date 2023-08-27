@@ -38,7 +38,7 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, __attribute((unused)) void* reserved) {
     stdiois_jvm = vm;
     JNIEnv *env;
     (*vm)->GetEnv(vm, (void**)&env, JNI_VERSION_1_4);
-    jclass eventLogListener = (*env)->FindClass(env, "net/kdt/pojavlaunch/Logger$eventLogListener");
+    jclass eventLogListener = (*env)->FindClass(env, "net/kdt/pojavview/Logger$eventLogListener");
     logger_onEventLogged = (*env)->GetMethodID(env, eventLogListener, "onEventLogged", "(Ljava/lang/String;)V");
     return JNI_VERSION_1_4;
 }
@@ -65,7 +65,7 @@ static void *logger_thread() {
     return NULL;
 }
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_Logger_begin(JNIEnv *env, __attribute((unused)) jclass clazz, jstring logPath) {
+Java_net_kdt_pojavview_Logger_begin(JNIEnv *env, __attribute((unused)) jclass clazz, jstring logPath) {
     // TODO: implement logToActivity()
     if(latestlog_fd != -1) {
         int localfd = latestlog_fd;
@@ -116,17 +116,17 @@ void custom_exit(int code) {
     }
     old_exit(code);
 }
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupExitTrap(JNIEnv *env, __attribute((unused)) jclass clazz, jobject context) {
+JNIEXPORT void JNICALL Java_net_kdt_pojavview_utils_JREUtils_setupExitTrap(JNIEnv *env, __attribute((unused)) jclass clazz, jobject context) {
     exitTrap_ctx = (*env)->NewGlobalRef(env,context);
     (*env)->GetJavaVM(env,&exitTrap_jvm);
-    exitTrap_exitClass = (*env)->NewGlobalRef(env,(*env)->FindClass(env,"net/kdt/pojavlaunch/ExitActivity"));
+    exitTrap_exitClass = (*env)->NewGlobalRef(env,(*env)->FindClass(env,"net/kdt/pojavview/ExitActivity"));
     exitTrap_staticMethod = (*env)->GetStaticMethodID(env,exitTrap_exitClass,"showExitMessage","(Landroid/content/Context;I)V");
     xhook_enable_debug(0);
     xhook_register(".*\\.so$", "exit", custom_exit, (void **) &old_exit);
     xhook_refresh(1);
 }
 
-JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_Logger_appendToLog(JNIEnv *env, __attribute((unused)) jclass clazz, jstring text) {
+JNIEXPORT void JNICALL Java_net_kdt_pojavview_Logger_appendToLog(JNIEnv *env, __attribute((unused)) jclass clazz, jstring text) {
     jsize appendStringLength = (*env)->GetStringUTFLength(env, text);
     char newChars[appendStringLength+2];
     (*env)->GetStringUTFRegion(env, text, 0, appendStringLength, newChars);
@@ -138,7 +138,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_Logger_appendToLog(JNIEnv *env, 
 }
 
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_Logger_setLogListener(JNIEnv *env, __attribute((unused)) jclass clazz, jobject log_listener) {
+Java_net_kdt_pojavview_Logger_setLogListener(JNIEnv *env, __attribute((unused)) jclass clazz, jobject log_listener) {
     jobject logListenerLocal = logListener;
     if(log_listener == NULL) {
         logListener = NULL;
