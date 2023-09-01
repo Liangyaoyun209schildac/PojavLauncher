@@ -31,7 +31,7 @@
     <string name="warning_remove_account">This account will be removed!</string>
 
     <!-- AlertDialog title -->
-    <string name="alerttitle_install_jre">Install Java Runtime %s (.tar.xz)</string>
+    <string name="alerttitle_install_jre">Install Java Runtime %1$s (.tar.xz)</string>
     <string name="alerttitle_installmod">Select a mod installer</string>
 
     <!-- Error messages -->
@@ -58,10 +58,10 @@
     <string name="mcl_account_local">Local</string>
 
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_version_msg">Ready to play Minecraft %s</string>
+    <string name="mcl_version_msg">Ready to play Minecraft %1$s</string>
     <string name="mcl_launch_cleancache">Cleaning cache files</string>
-    <string name="mcl_launch_downloading">Downloading %s</string>
-    <string name="mcl_launch_downloading_progress">"Downloading %s (%.2f MB / %.2f MB)"</string>
+    <string name="mcl_launch_downloading">Downloading %1$s</string>
+    <string name="mcl_launch_downloading_progress">"Downloading %1$s (%2$.2f MB / %3$.2f MB)"</string>
     <string name="mcl_launch_download_assets">Preparing to download resources</string>
     <string name="mcl_launch_error_localmode">Minecraft can\'t be legally installed when logged in with a local account. Please switch to an online account to continue.</string>
 
@@ -84,7 +84,7 @@
     <string name="mcl_setting_title_ignore_notch">Ignore notch</string>
     <string name="mcl_setting_subtitle_ignore_notch">Ignore the notch and extends the screen under it.\nGives you a more immersive experience.</string>
     <string name="mcl_setting_title_resolution_scaler">Resolution Scaler</string>
-    <string name="mcl_setting_subtitle_resolution_scaler">Allows you to decrease the game resolution. 100% is full resolution</string>
+    <string name="mcl_setting_subtitle_resolution_scaler">Allows you to decrease the game resolution. 100%% is full resolution</string>
     <string name="mcl_setting_title_longpresstrigger">How long will trigger after long press</string>
     <string name="mcl_setting_subtitle_longpresstrigger">Change trigger time for long press in destroy block and drop item.</string>
     <string name="mcl_setting_title_backtorightmouse">Treat back button as right mouse</string>
@@ -124,14 +124,14 @@
     <string name="global_clone">Clone</string>
     <string name="global_restart">Restart</string>
     <string name="global_save">Save</string>
-    <string name="global_unpacking">Unpacking %s</string>
+    <string name="global_unpacking">Unpacking %1$s</string>
     <string name="global_error_field_empty">This field can\'t be empty</string>
     <string name="global_waiting">Wait</string>
     <string name="global_select">Select</string>
     <string name="global_retry">Retry</string>
 
     <!-- MainActivity: strings -->
-    <string name="mcn_exit_title">Application/Game exited with code %d, check latestlog.txt for more details.</string>
+    <string name="mcn_exit_title">Application/Game exited with code %1$d, check latestlog.txt for more details.</string>
     <string name="mcn_exit_call">Exit</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 was not installed!</string>
@@ -176,8 +176,8 @@
     <string name="control_more3"></string>
     <string name="control_more4"></string>
 -->
-    <string name="customctrl_edit">Editing %s</string>
-    <string name="customctrl_remove">Remove %s?</string>
+    <string name="customctrl_edit">Editing %1$s</string>
+    <string name="customctrl_remove">Remove %1$s?</string>
 
     <string name="customctrl_keyname">Keycode</string>
     <string name="customctrl_toggle">Toggleable</string>
@@ -207,7 +207,7 @@
     <string name="customctrl_addbutton_drawer">Add button drawer</string>
     <string name="customctrl_addbutton_joystick">Add joystick</string>
     <string name="customctrl_addsubbutton">Add sub-button</string>
-    <string name="customctrl_add_subbutton_message">Sub-button n°%d has been added !</string>
+    <string name="customctrl_add_subbutton_message">Sub-button n°%1$d has been added !</string>
 
     <string name="customctrl_selectdefault">Select default Control json</string>
     <string name="customctrl_export">Export control</string>
@@ -216,7 +216,7 @@
     <string name="main_install_jar_file">Install .jar</string>
     <string name="main_options">Options</string>
     <string name="main_play">Play</string>
-    <string name="main_welcome">Welcome, %s</string>
+    <string name="main_welcome">Welcome, %1$s</string>
     <string name="main_infodev">Info (DEV)</string>
     <string name="main_switchuser">Switch user</string>
     <string name="main_version">Version:</string>
@@ -225,12 +225,12 @@
     <string name="main_no_news_feed">Failed to fetch the news feed !</string>
     <string name="auto_ram_subtitle">Enables automatic RAM adjuster</string>
     <string name="auto_ram_title">Auto RAM</string>
-    <string name="autoram_info_msg">Memory set to %d MB</string>
+    <string name="autoram_info_msg">Memory set to %1$d MB</string>
     <string name="mcl_setting_check_libraries">Check libraries after downloading</string>
     <string name="mcl_setting_check_libraries_subtitle">This option forces launcher to check the library hash if it\'s available. Prevents broken downloads.</string>
-    <string name="dl_library_sha_fail">Library %s is damaged and will be redownloaded</string>
-    <string name="dl_library_sha_unknown">Library %s can\'t be checked, have to assume it\'s good</string>
-    <string name="dl_library_sha_pass">Library %s is fine and usable</string>
+    <string name="dl_library_sha_fail">Library %1$s is damaged and will be redownloaded</string>
+    <string name="dl_library_sha_unknown">Library %1$s can\'t be checked, have to assume it\'s good</string>
+    <string name="dl_library_sha_pass">Library %1$s is fine and usable</string>
     <string name="mcl_disable_gestures">Disable gestures</string>
     <string name="mcl_disable_gestures_subtitle">Disables gestures, such as hold to break block, and tap to place a block.</string>
     <string name="mcl_disable_swap_hand">Disable double tap to swap hands</string>
@@ -241,12 +241,12 @@
     <string name="customctrl_swipeable">Swipeable</string>
     <string name="customctrl_forward_lock">Forward lock</string>
     <string name="customctrl_rounded">Rounded</string>
-    <string name="memory_warning_msg">The current amount of free RAM (%d) is lower than allocated RAM (%d), which may lead to crashes. Change the allocation if the game crashes.</string>
+    <string name="memory_warning_msg">The current amount of free RAM (%1$d) is lower than allocated RAM (%2$d), which may lead to crashes. Change the allocation if the game crashes.</string>
     <string name="mcl_memory_allocation">Memory allocation</string>
     <string name="mcl_memory_allocation_subtitle">Controls how much memory is given to Minecraft</string>
-    <string name="multirt_java_ver">%s (Java %d)</string>
+    <string name="multirt_java_ver">%1$s (Java %2$d)</string>
     <string name="multirt_runtime_corrupt">Corrupted Java Runtime</string>
-    <string name="multirt_runtime_incompatiblearch">Incompatible architecture: %s</string>
+    <string name="multirt_runtime_incompatiblearch">Incompatible architecture: %1$s</string>
     <string name="multirt_config_title">Java VMs</string>
     <string name="multirt_config_add">Add new</string>
     <string name="multirt_config_add_subtitle">Import new Java VM</string>
@@ -256,7 +256,7 @@
     <string name="multirt_config_setdefault">Set default</string>
     <string name="multirt_config_setdefault_already">Default</string>
     <string name="multirt_config_removeerror_last">You must have at least one Java Runtime installed</string>
-    <string name="multirt_nocompartiblert">Can\'t find any compartible Java Runtime. This version requires Java %d or newer.</string>
+    <string name="multirt_nocompartiblert">Can\'t find any compartible Java Runtime. This version requires Java %1$d or newer.</string>
     <string name="multirt_nojava8rt">Can\'t find Java 8. In order to use this option, you need to install Java 8.</string>
     <string name="multirt_delete_runtime">Delete runtime</string>
 
@@ -266,7 +266,7 @@
     <string name="pvc_jvmArgs">JVM arguments</string>
     <string name="pvc_title">Per-version settings</string>
     <string name="storage_warning_title">Storage changes</string>
-    <string name="storage_warning_text"> <![CDATA[Due to Google\'s new scoped storage enforcements added in Android 10 and higher, we are required to move the game directory into an app-private folder.<br /> The new folder for Pojav files is <b>Android/data/%s/files/</b> (also accessible using a storage provider in your file explorer).<br /> If you need to copy your game files, please copy everything from the original folder at <b>games/PojavLauncher</b> manually.]]></string>
+    <string name="storage_warning_text"> <![CDATA[Due to Google\'s new scoped storage enforcements added in Android 10 and higher, we are required to move the game directory into an app-private folder.<br /> The new folder for Pojav files is <b>Android/data/%1$s/files/</b> (also accessible using a storage provider in your file explorer).<br /> If you need to copy your game files, please copy everything from the original folder at <b>games/PojavLauncher</b> manually.]]></string>
 
     <string name="control_offset_title">Control offset</string>
     <string name="control_top_offset">Top offset: </string>
@@ -322,7 +322,7 @@
     <string name="pedit_renderer">Renderer</string>
     <string name="arc_capes_title">Cosmetica Capes</string>
     <string name="arc_capes_desc">Enables capes from Cosmetica (previously Arc). For more information please visit https://cosmetica.cc. Requires OptiFine.</string>
-    <string name="migrated_profile_str">%s version configuration</string>
+    <string name="migrated_profile_str">%1$s version configuration</string>
     <string name="color_default_hex" translatable="false">FFFF0000</string>
     <string name="notif_channel_name">General</string>
     <string name="notif_channel_id" translatable="false">channel_id</string>
@@ -331,7 +331,7 @@
     <string name="mcl_setting_veroption_installed">Installed</string>
     <string name="use_global_default">(Use global default)</string>
     <string name="default_control">Default control</string>
-    <string name="progresslayout_tasks_in_progress">%d tasks in progress</string>
+    <string name="progresslayout_tasks_in_progress">%1$d tasks in progress</string>
     <string name="notification_terminate">Terminate</string>
     <string name="notification_game_runs">The game is running!</string>
     <string name="folder_dialog_create">Create</string>
@@ -344,7 +344,7 @@
     <string name="no_saved_accounts">No saved accounts</string>
     <string name="downloading_versions">Downloading version list…</string>
     <string name="mc_download_failed">Failed to download Minecraft! This could be due to bad network connection, incorrectly placed files, etc..</string>
-    <string name="xerr_unknown">Unknown Xbox Live API error %d</string>
+    <string name="xerr_unknown">Unknown Xbox Live API error %1$d</string>
     <string name="xerr_no_account">You don\'t seem to have an Xbox Live account. Please log in once on https://minecraft.net/ and try again.</string>
     <string name="xerr_adult_verification">An adult needs to verify your account.</string>
     <string name="xerr_child">Your account is a child account, and needs to be added into a Family in order to log in.</string>
@@ -364,7 +364,7 @@
     <string name="create_profile">Create new profile</string>
     <string name="preference_shader_dump_title">Enable shader dumping</string>
     <string name="preference_shader_dump_description">Log converted shaders into the log file</string>
-    <string name="percent_format">%d%%</string>
+    <string name="percent_format">%1$d%%</string>
     <string name="customctrl_editor_exit_title">Leaving?</string>
     <string name="customctrl_editor_exit_msg">Are you sure you want to exit?</string>
     <string name="customctrl_editor_exit">Leave editor</string>
@@ -383,7 +383,7 @@
     <string name="preference_force_big_core_title">Force renderer to run on the big core</string>
     <string name="preference_force_big_core_desc">Forces the Minecraft render thread to run on the core with the highest max frequency</string>
     <string name="version_select_hint">Select a version</string>
-    <string name="forge_dl_progress">Downloading installer for %s</string>
+    <string name="forge_dl_progress">Downloading installer for %1$s</string>
     <string name="modloader_dl_failed_to_load_list">Failed to load the version list!</string>
     <string name="forge_dl_no_installer">Sorry, but this version of Forge does not have an installer, which is not yet supported.</string>
     <string name="forge_dl_select_version">Select Forge version</string>
@@ -400,7 +400,7 @@
     <string name="fabric_dl_loader_title">Select versions</string>
     <string name="of_dl_select_version">Select OptiFine version</string>
     <string name="of_dl_failed_to_scrape">Failed to collect data for OptiFine installation</string>
-    <string name="of_dl_progress">Downloading %s</string>
+    <string name="of_dl_progress">Downloading %1$s</string>
     <string name="create_profile_optifine">Create OptiFine profile</string>
 
 

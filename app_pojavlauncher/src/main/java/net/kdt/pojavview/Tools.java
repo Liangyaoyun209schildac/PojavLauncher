@@ -142,13 +142,6 @@ public final class Tools {
 
         getCacioJavaArgs(javaArgList, runtime.javaVersion == 8);
 
-//        if (versionInfo.logging != null) {
-//            String configFile = Tools.DIR_DATA + "/security/" + versionInfo.logging.client.file.id.replace("client", "log4j-rce-patch");
-//            if (!new File(configFile).exists()) {
-//                configFile = Tools.DIR_GAME_NEW + "/" + versionInfo.logging.client.file.id;
-//            }
-//            javaArgList.add("-Dlog4j.configurationFile=" + configFile);
-//        }
         String cp = getLWJGL3ClassPath() + ":" + minecraftProfile.classpath;
         for (String item : minecraftProfile.jvmArgs) {
             javaArgList.add(item

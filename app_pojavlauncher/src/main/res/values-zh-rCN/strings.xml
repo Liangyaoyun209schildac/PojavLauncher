@@ -22,7 +22,7 @@
     <!-- Warnings -->
     <string name="warning_remove_account">此账户将被移除！</string>
     <!-- AlertDialog title -->
-    <string name="alerttitle_install_jre">安装 Java 运行时 %s （.tar.xz）</string>
+    <string name="alerttitle_install_jre">安装 Java 运行时 %1$s （.tar.xz）</string>
     <string name="alerttitle_installmod">选择模组安装器</string>
     <!-- Error messages -->
     <string name="error_fatal">PojavLauncher 意外崩溃</string>
@@ -44,10 +44,10 @@
     <string name="mcl_account_connected">已连接</string>
     <string name="mcl_account_local">本地模式</string>
     <!-- MCLauncherActivity: Strings -->
-    <string name="mcl_version_msg">Minecraft %s 就绪</string>
+    <string name="mcl_version_msg">Minecraft %1$s 就绪</string>
     <string name="mcl_launch_cleancache">正在清理缓存</string>
-    <string name="mcl_launch_downloading">正在下载 %s</string>
-    <string name="mcl_launch_downloading_progress">"正在下载 %s (%.2f MB / %.2f MB)"</string>
+    <string name="mcl_launch_downloading">正在下载 %1$s</string>
+    <string name="mcl_launch_downloading_progress">"正在下载 %1$s (%2$.2f MB / %3$.2f MB)"</string>
     <string name="mcl_launch_download_assets">正在准备下载资源</string>
     <string name="mcl_launch_error_localmode">Minecraft 无法在本地账户中进行安装，请切换到正版账户以继续。</string>
     <string name="mcl_options">选项</string>
@@ -67,7 +67,7 @@
     <string name="mcl_setting_title_ignore_notch">忽略刘海屏</string>
     <string name="mcl_setting_subtitle_ignore_notch">忽略刘海屏并将屏幕内容扩展至其下方。\n给您以更完整的沉浸感。</string>
     <string name="mcl_setting_title_resolution_scaler">分辨率缩放</string>
-    <string name="mcl_setting_subtitle_resolution_scaler">允许降低游戏画面分辨率。原生分辨率为 100%</string>
+    <string name="mcl_setting_subtitle_resolution_scaler">允许降低游戏画面分辨率。原生分辨率为 100%%</string>
     <string name="mcl_setting_title_longpresstrigger">长按触发时长</string>
     <string name="mcl_setting_subtitle_longpresstrigger">修改长按摧毁方块、丢弃物品的触发时长</string>
     <string name="mcl_setting_title_backtorightmouse">将返回键视为鼠标右键</string>
@@ -106,12 +106,12 @@
     <string name="global_clone">复制</string>
     <string name="global_restart">重启</string>
     <string name="global_save">保存</string>
-    <string name="global_unpacking">正在解压 %s</string>
+    <string name="global_unpacking">正在解压 %1$s</string>
     <string name="global_error_field_empty">此处表单不能为空</string>
     <string name="global_waiting">请稍等</string>
     <string name="global_select">选择</string>
     <!-- MainActivity: strings -->
-    <string name="mcn_exit_title">应用程序/游戏以代码 %d退出，请查看 latestlog.txt 了解更多详情。</string>
+    <string name="mcn_exit_title">应用程序/游戏以代码 %1$d退出，请查看 latestlog.txt 了解更多详情。</string>
     <string name="mcn_exit_call">退出</string>
     <string name="mcn_exit_confirm">确定强制关闭？</string>
     <string name="mcn_check_fail_lwjgl">未安装 LWJGL3！</string>
@@ -153,8 +153,8 @@
     <string name="control_more3"></string>
     <string name="control_more4"></string>
 -->
-    <string name="customctrl_edit">正在编辑 %s</string>
-    <string name="customctrl_remove">确认删除 %s 吗？</string>
+    <string name="customctrl_edit">正在编辑 %1$s</string>
+    <string name="customctrl_remove">确认删除 %1$s 吗？</string>
     <string name="customctrl_keyname">键码</string>
     <string name="customctrl_toggle">可切换</string>
     <string name="customctrl_size">大小</string>
@@ -178,14 +178,14 @@
     <string name="customctrl_addbutton">添加按键</string>
     <string name="customctrl_addbutton_drawer">添加组合键</string>
     <string name="customctrl_addsubbutton">添加子按钮</string>
-    <string name="customctrl_add_subbutton_message">子按钮 n°%d 已添加！</string>
+    <string name="customctrl_add_subbutton_message">子按钮 n°%1$d 已添加！</string>
     <string name="customctrl_selectdefault">选择默认 .json 控制键位</string>
     <string name="customctrl_export">导出键盘</string>
     <string name="main_share_logs">共享日志文件</string>
     <string name="main_install_jar_file">安装 .jar</string>
     <string name="main_options">选项</string>
     <string name="main_play">启动游戏</string>
-    <string name="main_welcome">欢迎， %s</string>
+    <string name="main_welcome">欢迎， %1$s</string>
     <string name="main_infodev">信息（开发）</string>
     <string name="main_switchuser">切换用户</string>
     <string name="main_version">版本：</string>
@@ -194,12 +194,12 @@
     <string name="main_no_news_feed">新闻获取失败！</string>
     <string name="auto_ram_subtitle">启用内存自动调节</string>
     <string name="auto_ram_title">自动设置内存大小</string>
-    <string name="autoram_info_msg">内存已设为 %d MB</string>
+    <string name="autoram_info_msg">内存已设为 %1$d MB</string>
     <string name="mcl_setting_check_libraries">在下载后检查依赖库</string>
     <string name="mcl_setting_check_libraries_subtitle">此选项强制启动器在哈希值可用时检查运行库，防止下载错误。</string>
-    <string name="dl_library_sha_fail">依赖 %s 已损坏，此依赖将被重新下载</string>
-    <string name="dl_library_sha_unknown">无法检查运行库 %s ，希望它正常</string>
-    <string name="dl_library_sha_pass">依赖库 %s 正常</string>
+    <string name="dl_library_sha_fail">依赖 %1$s 已损坏，此依赖将被重新下载</string>
+    <string name="dl_library_sha_unknown">无法检查运行库 %1$s ，希望它正常</string>
+    <string name="dl_library_sha_pass">依赖库 %1$s 正常</string>
     <string name="mcl_disable_gestures">禁用手势</string>
     <string name="mcl_disable_gestures_subtitle">禁用手势，例如长按破坏方块和点击放置方块。</string>
     <string name="mcl_disable_swap_hand">禁用双击交换手中物品</string>
@@ -209,11 +209,11 @@
     <string name="customctrl_passthru">鼠标透传</string>
     <string name="customctrl_swipeable">可滑动</string>
     <string name="customctrl_rounded">圆角</string>
-    <string name="memory_warning_msg">当前可用内存（%d）低于所分配的内存（%d），这可能会导致游戏崩溃。如果游戏崩溃请更改配置。</string>
+    <string name="memory_warning_msg">当前可用内存（%1$d）低于所分配的内存（%2$d），这可能会导致游戏崩溃。如果游戏崩溃请更改配置。</string>
     <string name="mcl_memory_allocation">内存分配</string>
     <string name="mcl_memory_allocation_subtitle">控制给 Minecraft 分配多少内存</string>
     <string name="multirt_runtime_corrupt">Java 运行时损坏</string>
-    <string name="multirt_runtime_incompatiblearch">不兼容的CPU架构： %s</string>
+    <string name="multirt_runtime_incompatiblearch">不兼容的CPU架构： %1$s</string>
     <string name="multirt_config_title">Java虚拟机</string>
     <string name="multirt_config_add">新建</string>
     <string name="multirt_config_add_subtitle">导入新的 Java VM</string>
@@ -223,7 +223,7 @@
     <string name="multirt_config_setdefault">设为默认</string>
     <string name="multirt_config_setdefault_already">默认</string>
     <string name="multirt_config_removeerror_last">您必须至少安装一个 Java 运行时</string>
-    <string name="multirt_nocompartiblert">找不到合适的 Java 运行时。此版本需要 Java %d 或更高版本。</string>
+    <string name="multirt_nocompartiblert">找不到合适的 Java 运行时。此版本需要 Java %1$d 或更高版本。</string>
     <string name="multirt_nojava8rt">无法找到 Java 8。要使用此选项，您需要安装 Java 8。</string>
     <string name="compat_117_message">Minecraft 21w10a+ 需要 OpenGL 3.2 核心配置文件。遗憾的是，GL4ES 渲染器目前并不完全支持它，但是您可以安装额外的资源包来运行这些版本。按\"确认\"以确认安装，按\"取消\"以中止启动。</string>
     <string name="compat_11x_playanyway">仍然开始游戏</string>
@@ -231,7 +231,7 @@
     <string name="pvc_jvmArgs">JVM 参数</string>
     <string name="pvc_title">预发布版本设置</string>
     <string name="storage_warning_title">存储位置变更</string>
-    <string name="storage_warning_text"><![CDATA[由于 Google 在 Android 10 及更高版本中增加了新的存储限制，我们需要将游戏目录移动到应用的私有文件夹中。<br />新的 Pojav 文件夹是 <b>Android/data/%s/files/</b> （同样可以通过您的文件管理器访问）。<br />如果您需要复制您的游戏文件，请从 <b>games/PojavLauncher</b> 中手动复制所有内容]]></string>
+    <string name="storage_warning_text"><![CDATA[由于 Google 在 Android 10 及更高版本中增加了新的存储限制，我们需要将游戏目录移动到应用的私有文件夹中。<br />新的 Pojav 文件夹是 <b>Android/data/%1$s/files/</b> （同样可以通过您的文件管理器访问）。<br />如果您需要复制您的游戏文件，请从 <b>games/PojavLauncher</b> 中手动复制所有内容]]></string>
     <string name="control_offset_title">控件偏移</string>
     <string name="control_top_offset">顶端偏移： </string>
     <string name="control_right_offset">右偏移： </string>
@@ -280,14 +280,14 @@
     <string name="pedit_renderer">渲染器</string>
     <string name="arc_capes_title">Cosmetica 披风</string>
     <string name="arc_capes_desc">启用来自 Cosmetica（原 Arc ）的披风。欲了解更多信息，请访问 https://arcapes.com。需要 OptiFine。</string>
-    <string name="migrated_profile_str">%s 版本设置</string>
+    <string name="migrated_profile_str">%1$s 版本设置</string>
     <string name="notif_channel_name">常规</string>
     <string name="lazy_service_default_title">Pojav 前台服务</string>
     <string name="lazy_service_default_description">该服务用于执行耗时时间长的任务</string>
     <string name="mcl_setting_veroption_installed">已安装</string>
     <string name="use_global_default">（使用全局默认值）</string>
     <string name="default_control">默认控件布局</string>
-    <string name="progresslayout_tasks_in_progress">%d 项任务正在进行中</string>
+    <string name="progresslayout_tasks_in_progress">%1%d 项任务正在进行中</string>
     <string name="notification_terminate">终止</string>
     <string name="notification_game_runs">游戏正在进行！</string>
     <string name="folder_dialog_create">新建</string>
@@ -298,7 +298,7 @@
     <string name="no_saved_accounts">没有已保存的账户</string>
     <string name="downloading_versions">正在下载版本列表……</string>
     <string name="mc_download_failed">下载 Minecraft 失败！这可能是由于网络连接不良、文件放置错误等。</string>
-    <string name="xerr_unknown">未知的 Xbox Live API 错误 %d</string>
+    <string name="xerr_unknown">未知的 Xbox Live API 错误 %1%d</string>
     <string name="xerr_no_account">您似乎没有 Xbox Live 账户。请在 https://minecraft.net/上登录一次，然后重试。</string>
     <string name="xerr_adult_verification">需要成人验证您的账户。</string>
     <string name="xerr_child">您的账户是儿童账户，需要添加到家庭中方能登录。</string>
