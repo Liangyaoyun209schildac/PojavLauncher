@@ -79,7 +79,6 @@ public final class Tools {
     public static final String LAUNCHERPROFILES_RTPREFIX = "pojav://";
 
     // New since 3.3.1
-    public static String DIR_ACCOUNT_NEW;
     public static String DIR_GAME_HOME = Environment.getExternalStorageDirectory().getAbsolutePath();
 
     // New since 3.0.0
@@ -124,6 +123,15 @@ public final class Tools {
         NATIVE_LIB_DIR = ctx.getApplicationInfo().nativeLibraryDir;
     }
 
+    public static void showError(Context ctx, String savePath, boolean storageAllow, Throwable th) {
+        Intent fatalErrorIntent = new Intent(ctx, FatalErrorActivity.class);
+        fatalErrorIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        fatalErrorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        fatalErrorIntent.putExtra("throwable", th);
+        fatalErrorIntent.putExtra("savePath", savePath);
+        fatalErrorIntent.putExtra("storageAllow", storageAllow);
+        ctx.startActivity(fatalErrorIntent);
+    }
 
     public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile) throws Throwable {
         Runtime runtime = MultiRTUtils.read(minecraftProfile.javaDir);

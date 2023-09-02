@@ -38,6 +38,7 @@ public class MultiRTUtils {
         File dest = new File(path);
         if (!dest.exists()) return;
         Runtime runtime = read(path);
+        if(runtime == null) return;
         String libFolder = "lib";
         if (new File(dest, libFolder + "/" + runtime.arch).exists()) libFolder = libFolder + "/" + runtime.arch;
         File ftIn = new File(dest, libFolder + "/libfreetype.so.6");
