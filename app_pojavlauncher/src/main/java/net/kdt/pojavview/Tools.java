@@ -30,9 +30,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,12 +45,10 @@ import net.kdt.pojavview.multirt.MultiRTUtils;
 import net.kdt.pojavview.multirt.Runtime;
 import net.kdt.pojavview.plugins.FFmpegPlugin;
 import net.kdt.pojavview.prefs.LauncherPreferences;
-import net.kdt.pojavview.utils.DownloadUtils;
 import net.kdt.pojavview.utils.JREUtils;
 import net.kdt.pojavview.utils.OldVersionsUtils;
 import net.kdt.pojavview.value.launcherprofiles.MinecraftProfile;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.glfw.CallbackBridge;
 
@@ -79,14 +74,13 @@ public final class Tools {
     public static String NATIVE_LIB_DIR;
     public static String DIR_DATA; //Initialized later to get context
     public static File DIR_CACHE;
-    public static String MULTIRT_HOME;
     public static String LOCAL_RENDERER = null;
     public static int DEVICE_ARCHITECTURE;
     public static final String LAUNCHERPROFILES_RTPREFIX = "pojav://";
 
     // New since 3.3.1
     public static String DIR_ACCOUNT_NEW;
-    public static String DIR_GAME_HOME = Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/PojavLauncher";
+    public static String DIR_GAME_HOME = Environment.getExternalStorageDirectory().getAbsolutePath();
 
     // New since 3.0.0
     public static String DIRNAME_HOME_JRE = "lib";
@@ -123,7 +117,6 @@ public final class Tools {
     public static void initContextConstants(Context ctx){
         DIR_CACHE = ctx.getCacheDir();
         DIR_DATA = ctx.getFilesDir().getParent();
-        MULTIRT_HOME = DIR_DATA+"/runtimes";
         DIR_GAME_HOME = getPojavStorageRoot(ctx).getAbsolutePath();
 
         CTRLMAP_PATH = DIR_GAME_HOME + "/controlmap";
@@ -133,7 +126,7 @@ public final class Tools {
 
 
     public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile) throws Throwable {
-        Runtime runtime = MultiRTUtils.forceReread(Tools.pickRuntime(minecraftProfile));
+        Runtime runtime = MultiRTUtils.read(minecraftProfile.javaDir);
 
         // Select the appropriate openGL version
         OldVersionsUtils.selectOpenGlVersion(minecraftProfile.time);
@@ -163,26 +156,6 @@ public final class Tools {
                 context.getString(R.string.notif_channel_name), NotificationManager.IMPORTANCE_DEFAULT);
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         manager.createNotificationChannel(channel);
-    }
-    public static void disableSplash(File dir) {
-        File configDir = new File(dir, "config");
-        if(configDir.exists() || configDir.mkdirs()) {
-            File forgeSplashFile = new File(dir, "config/splash.properties");
-            String forgeSplashContent = "enabled=true";
-            try {
-                if (forgeSplashFile.exists()) {
-                    forgeSplashContent = Tools.read(forgeSplashFile.getAbsolutePath());
-                }
-                if (forgeSplashContent.contains("enabled=true")) {
-                    Tools.write(forgeSplashFile.getAbsolutePath(),
-                            forgeSplashContent.replace("enabled=true", "enabled=false"));
-                }
-            } catch (IOException e) {
-                Log.w(Tools.APP_NAME, "Could not disable Forge 1.12.2 and below splash screen!", e);
-            }
-        } else {
-            Log.w(Tools.APP_NAME, "Failed to create the configuration directory");
-        }
     }
 
     public static void getCacioJavaArgs(List<String> javaArgList, boolean isJava8) {
@@ -232,27 +205,6 @@ public final class Tools {
             }
         }
         javaArgList.add(cacioClasspath.toString());
-    }
-
-    public static String fromStringArray(String[] strArr) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < strArr.length; i++) {
-            if (i > 0) builder.append(" ");
-            builder.append(strArr[i]);
-        }
-
-        return builder.toString();
-    }
-
-    private static String[] splitAndFilterEmpty(String argStr) {
-        List<String> strList = new ArrayList<>();
-        for (String arg : argStr.split(" ")) {
-            if (!arg.isEmpty()) {
-                strList.add(arg);
-            }
-        }
-        //strList.add("--fullscreen");
-        return strList.toArray(new String[0]);
     }
 
     private static String getLWJGL3ClassPath() {
@@ -424,23 +376,6 @@ public final class Tools {
         }
     }
 
-    public static void dialogOnUiThread(final Activity activity, final CharSequence title, final CharSequence message) {
-        activity.runOnUiThread(()->dialog(activity, title, message));
-    }
-
-    public static void dialog(final Context context, final CharSequence title, final CharSequence message) {
-        new AlertDialog.Builder(context)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, null)
-                .show();
-    }
-
-    public static void openURL(Activity act, String url) {
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        act.startActivity(browserIntent);
-    }
-
     public static String read(InputStream is) throws IOException {
         String readResult = IOUtils.toString(is, StandardCharsets.UTF_8);
         is.close();
@@ -459,32 +394,6 @@ public final class Tools {
         }
         try(FileOutputStream outStream = new FileOutputStream(file)) {
             IOUtils.write(content, outStream);
-        }
-    }
-
-    public static void downloadFile(String urlInput, String nameOutput) throws IOException {
-        File file = new File(nameOutput);
-        DownloadUtils.downloadFile(urlInput, file);
-    }
-    public interface DownloaderFeedback {
-        void updateProgress(int curr, int max);
-    }
-
-
-    public static boolean compareSHA1(File f, String sourceSHA) {
-        try {
-            String sha1_dst;
-            try (InputStream is = new FileInputStream(f)) {
-                sha1_dst = new String(Hex.encodeHex(org.apache.commons.codec.digest.DigestUtils.sha1(is)));
-            }
-            if(sourceSHA != null) {
-                return sha1_dst.equalsIgnoreCase(sourceSHA);
-            } else{
-                return true; // fake match
-            }
-        }catch (IOException e) {
-            Log.i("SHA1","Fake-matching a hash due to a read error",e);
-            return true;
         }
     }
 
@@ -542,40 +451,6 @@ public final class Tools {
         fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
     }
 
-    public static void installMod(Activity activity, boolean customJavaArgs) {
-        if (MultiRTUtils.getExactJreName(8) == null) {
-            Toast.makeText(activity, R.string.multirt_nojava8rt, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if(!customJavaArgs){ // Launch the intent to get the jar file
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension("jar");
-            if(mimeType == null) mimeType = "*/*";
-            intent.setType(mimeType);
-            activity.startActivityForResult(intent, RUN_MOD_INSTALLER);
-            return;
-        }
-
-        // install mods with custom arguments
-        final EditText editText = new EditText(activity);
-        editText.setSingleLine();
-        editText.setHint("-jar/-cp /path/to/file.jar ...");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity)
-                .setTitle(R.string.alerttitle_installmod)
-                .setNegativeButton(android.R.string.cancel, null)
-                .setView(editText)
-                .setPositiveButton(android.R.string.ok, (di, i) -> {
-                    Intent intent = new Intent(activity, JavaGUILauncherActivity.class);
-                    intent.putExtra("skipDetectMod", true);
-                    intent.putExtra("javaArgs", editText.getText().toString());
-                    activity.startActivity(intent);
-                });
-        builder.show();
-    }
-
     /** Display and return a progress dialog, instructing to wait */
     private static ProgressDialog getWaitingDialog(Context ctx){
         final ProgressDialog barrier = new ProgressDialog(ctx);
@@ -614,23 +489,6 @@ public final class Tools {
         });
     }
 
-
-    public static void installRuntimeFromUri(Activity activity, Uri uri){
-        sExecutorService.execute(() -> {
-            try {
-                String name = getFileName(activity, uri);
-                MultiRTUtils.installRuntimeNamed(
-                        NATIVE_LIB_DIR,
-                        activity.getContentResolver().openInputStream(uri),
-                        name);
-
-                MultiRTUtils.postPrepare(name);
-            } catch (IOException e) {
-                Tools.showError(activity, e);
-            }
-        });
-    }
-
     public static String extractUntilCharacter(String input, String whatFor, char terminator) {
         int whatForStart = input.indexOf(whatFor);
         if(whatForStart == -1) return null;
@@ -644,53 +502,7 @@ public final class Tools {
         return string != null && !string.isEmpty();
     }
 
-    public static String getRuntimeName(String prefixedName) {
-        if(prefixedName == null) return prefixedName;
-        if(!prefixedName.startsWith(Tools.LAUNCHERPROFILES_RTPREFIX)) return null;
-        return prefixedName.substring(Tools.LAUNCHERPROFILES_RTPREFIX.length());
-    }
-
-    public static String getSelectedRuntime(MinecraftProfile minecraftProfile) {
-        String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;
-        String profileRuntime = getRuntimeName(minecraftProfile.javaDir);
-        if(profileRuntime != null) {
-            if(MultiRTUtils.forceReread(profileRuntime).versionString != null) {
-                runtime = profileRuntime;
-            }
-        }
-        return runtime;
-    }
-
     public static void runOnUiThread(Runnable runnable) {
         MAIN_HANDLER.post(runnable);
-    }
-
-    public static @NonNull String pickRuntime(MinecraftProfile minecraftProfile) {
-        int targetJavaVersion = Integer.parseInt(minecraftProfile.jvmVersion);
-        String runtime = getSelectedRuntime(minecraftProfile);
-        String profileRuntime = getRuntimeName(minecraftProfile.javaDir);
-        Runtime pickedRuntime = MultiRTUtils.read(runtime);
-        if(runtime == null || pickedRuntime.javaVersion == 0 || pickedRuntime.javaVersion < targetJavaVersion) {
-            String preferredRuntime = MultiRTUtils.getNearestJreName(targetJavaVersion);
-            if(preferredRuntime == null) throw new RuntimeException("Failed to autopick runtime!");
-            if(profileRuntime != null) minecraftProfile.javaDir = Tools.LAUNCHERPROFILES_RTPREFIX+preferredRuntime;
-            runtime = preferredRuntime;
-        }
-        return runtime;
-    }
-
-    /** Triggers the share intent chooser, with the latestlog file attached to it */
-    public static void shareLog(Context context){
-        Uri contentUri = DocumentsContract.buildDocumentUri(context.getString(R.string.storageProviderAuthorities), Tools.DIR_GAME_HOME + "/latestlog.txt");
-
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        shareIntent.setType("text/plain");
-
-        Intent sendIntent = Intent.createChooser(shareIntent, "latestlog.txt");
-        context.startActivity(sendIntent);
     }
 }

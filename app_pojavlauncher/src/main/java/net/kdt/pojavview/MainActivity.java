@@ -97,6 +97,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         minecraftProfile.jvmVersion = intent.getStringExtra("JVM_VERSION");
         minecraftProfile.mainclass = intent.getStringExtra("MAINCLASS");
         minecraftProfile.classpath = intent.getStringExtra("CLASSPATH");
+        minecraftProfile.javaDir = intent.getStringExtra("JAVA_DIR");
         minecraftProfile.v2 = intent.getBooleanExtra("GAME_V2", false);
 
 //        StringBuilder arg1 = new StringBuilder();

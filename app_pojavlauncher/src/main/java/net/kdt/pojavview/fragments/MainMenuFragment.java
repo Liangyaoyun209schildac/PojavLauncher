@@ -1,7 +1,5 @@
 package net.kdt.pojavview.fragments;
 
-import static net.kdt.pojavview.Tools.shareLog;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -28,11 +26,8 @@ public class MainMenuFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Button mNewsButton = view.findViewById(R.id.news_button);
         Button mCustomControlButton = view.findViewById(R.id.custom_control_button);
-        Button mShareLogsButton = view.findViewById(R.id.share_logs_button);
 
         mCustomControlButton.setOnClickListener(v -> startActivity(new Intent(requireContext(), CustomControlsActivity.class)));
-
-        mShareLogsButton.setOnClickListener((v) -> shareLog(requireContext()));
 
         mNewsButton.setOnClickListener((v)->{
             Tools.swapFragment(requireActivity(), LauncherPreferenceFragment.class, LauncherActivity.SETTING_FRAGMENT_TAG, true, null);

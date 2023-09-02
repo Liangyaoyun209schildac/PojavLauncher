@@ -5,7 +5,6 @@ import static net.kdt.pojavview.Architecture.is64BitsDevice;
 import static net.kdt.pojavview.Tools.LOCAL_RENDERER;
 import static net.kdt.pojavview.Tools.NATIVE_LIB_DIR;
 import static net.kdt.pojavview.Tools.currentDisplayMetrics;
-import static net.kdt.pojavview.Tools.shareLog;
 import static net.kdt.pojavview.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
 
 import android.annotation.SuppressLint;
@@ -139,14 +138,14 @@ public class JREUtils {
 
     }
 
-    public static void relocateLibPath(Runtime runtime, String jreHome) {
+    public static void relocateLibPath(Runtime runtime) {
         String JRE_ARCHITECTURE = runtime.arch;
         if (Architecture.archAsInt(JRE_ARCHITECTURE) == ARCH_X86){
             JRE_ARCHITECTURE = "i386/i486/i586";
         }
 
         for (String arch : JRE_ARCHITECTURE.split("/")) {
-            File f = new File(jreHome, "lib/" + arch);
+            File f = new File(runtime.path, "lib/" + arch);
             if (f.exists() && f.isDirectory()) {
                 Tools.DIRNAME_HOME_JRE = "lib/" + arch;
             }
@@ -157,9 +156,9 @@ public class JREUtils {
         if(FFmpegPlugin.isAvailable) {
             ldLibraryPath.append(FFmpegPlugin.libraryPath).append(":");
         }
-        ldLibraryPath.append(jreHome)
+        ldLibraryPath.append(runtime.path)
                 .append("/").append(Tools.DIRNAME_HOME_JRE)
-                .append("/jli:").append(jreHome).append("/").append(Tools.DIRNAME_HOME_JRE)
+                .append("/jli:").append(runtime.path).append("/").append(Tools.DIRNAME_HOME_JRE)
                 .append(":");
         ldLibraryPath.append("/system/").append(libName).append(":")
                 .append("/vendor/").append(libName).append(":")
@@ -168,7 +167,7 @@ public class JREUtils {
         LD_LIBRARY_PATH = ldLibraryPath.toString();
     }
 
-    public static void setJavaEnvironment(Activity activity, String jreHome) throws Throwable {
+    public static void setJavaEnvironment(String jreHome) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
         envMap.put("POJAV_NATIVEDIR", NATIVE_LIB_DIR);
         envMap.put("JAVA_HOME", jreHome);
@@ -268,14 +267,12 @@ public class JREUtils {
 
     @SuppressLint("StringFormatInvalid")
     public static int launchJavaVM(final Activity activity, final Runtime runtime, String gameDirectory, final List<String> JVMArgs) throws Throwable {
-        String runtimeHome = MultiRTUtils.getRuntimeHome(runtime.name).getAbsolutePath();
+        JREUtils.relocateLibPath(runtime);
 
-        JREUtils.relocateLibPath(runtime, runtimeHome);
-
-        setJavaEnvironment(activity, runtimeHome);
+        setJavaEnvironment(runtime.path);
 
         final String graphicsLib = loadGraphicsLibrary();
-        List<String> userArgs = getJavaArgs(runtimeHome, gameDirectory);
+        List<String> userArgs = getJavaArgs(runtime.path, gameDirectory);
 
         //Remove arguments that can interfere with the good working of the launcher
         purgeArg(userArgs,"-Xms");
@@ -293,7 +290,7 @@ public class JREUtils {
 
         userArgs.addAll(JVMArgs);
 
-        initJavaRuntime(runtimeHome);
+        initJavaRuntime(runtime.path);
         setupExitTrap(activity.getApplication());
         chdir(gameDirectory);
         userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
@@ -314,7 +311,6 @@ public class JREUtils {
                 dialog.setMessage(activity.getString(R.string.mcn_exit_title, exitCode));
 
                 dialog.setPositiveButton(R.string.main_share_logs, (p1, p2) -> {
-                    shareLog(activity);
                     MainActivity.fullyExit();
                 });
                 dialog.show();

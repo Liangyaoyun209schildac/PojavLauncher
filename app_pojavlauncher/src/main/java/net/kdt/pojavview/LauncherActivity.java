@@ -9,44 +9,27 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.kdt.mcgui.ProgressLayout;
-
 import net.kdt.pojavview.extra.ExtraConstants;
 import net.kdt.pojavview.extra.ExtraCore;
 import net.kdt.pojavview.extra.ExtraListener;
 
-import net.kdt.pojavview.multirt.MultiRTConfigDialog;
 import net.kdt.pojavview.prefs.LauncherPreferences;
-import net.kdt.pojavview.progresskeeper.ProgressKeeper;
-import net.kdt.pojavview.services.ProgressServiceKeeper;
 
 public class LauncherActivity extends BaseActivity {
     public static final String SETTING_FRAGMENT_TAG = "SETTINGS_FRAGMENT";
 
     private final int REQUEST_STORAGE_REQUEST_CODE = 1024;
     private final Object mLockStoragePerm = new Object();
-    private ProgressLayout mProgressLayout;
-    private ProgressServiceKeeper mProgressServiceKeeper;
 
     /* Listener for the back button in settings */
     private final ExtraListener<String> mBackPreferenceListener = (key, value) -> {
         if (value.equals("true")) onBackPressed();
-        return false;
-    };
-
-    private final ExtraListener<Boolean> mLaunchGameListener = (key, value) -> {
-        if(mProgressLayout.hasProcesses()){
-            Toast.makeText(this, R.string.tasks_ongoing, Toast.LENGTH_LONG).show();
-            return false;
-        }
-
         return false;
     };
 
@@ -55,20 +38,9 @@ public class LauncherActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pojav_launcher);
         getWindow().setBackgroundDrawable(null);
-        bindViews();
-        ProgressKeeper.addTaskCountListener((mProgressServiceKeeper = new ProgressServiceKeeper(this)));
         requestStoragePermission(); // Will wait here
 
-        ProgressKeeper.addTaskCountListener(mProgressLayout);
         ExtraCore.addExtraListener(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
-
-        ExtraCore.addExtraListener(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
-
-        mProgressLayout.observe(ProgressLayout.DOWNLOAD_MINECRAFT);
-        mProgressLayout.observe(ProgressLayout.UNPACK_RUNTIME);
-        mProgressLayout.observe(ProgressLayout.INSTALL_MODPACK);
-        mProgressLayout.observe(ProgressLayout.AUTHENTICATE_MICROSOFT);
-        mProgressLayout.observe(ProgressLayout.DOWNLOAD_VERSION_LIST);
     }
 
     @Override
@@ -79,11 +51,7 @@ public class LauncherActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mProgressLayout.cleanUpObservers();
-        ProgressKeeper.removeTaskCountListener(mProgressLayout);
-        ProgressKeeper.removeTaskCountListener(mProgressServiceKeeper);
         ExtraCore.removeExtraListenerFromValue(ExtraConstants.BACK_PREFERENCE, mBackPreferenceListener);
-        ExtraCore.removeExtraListenerFromValue(ExtraConstants.LAUNCH_GAME, mLaunchGameListener);
     }
 
     @Override
@@ -93,9 +61,6 @@ public class LauncherActivity extends BaseActivity {
         if (requestCode == Tools.RUN_MOD_INSTALLER && data != null) {
             Tools.launchModInstaller(this, data);
             return;
-        }
-        if (requestCode == MultiRTConfigDialog.MULTIRT_PICK_RUNTIME && data != null) {
-            Tools.installRuntimeFromUri(this, data.getData());
         }
         if (requestCode == REQUEST_STORAGE_REQUEST_CODE && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             synchronized (mLockStoragePerm) {
@@ -149,12 +114,5 @@ public class LauncherActivity extends BaseActivity {
                 mLockStoragePerm.notifyAll();
             }
         }
-    }
-
-    /**
-     * Stuff all the view boilerplate here
-     */
-    private void bindViews() {
-        mProgressLayout = findViewById(R.id.progress_layout);
     }
 }

@@ -18,18 +18,4 @@ public class MinecraftProfile {
 	public boolean logConfigIsXML;
 	public String pojavRendererName;
 	public String controlFile;
-	public MinecraftResolution[] resolution;
-
-	public MinecraftProfile(){}
-
-	public MinecraftProfile(MinecraftProfile profile){
-		version = profile.version;
-		gameDir = profile.gameDir;
-		javaDir = profile.javaDir;
-		logConfig = profile.logConfig;
-		logConfigIsXML = profile.logConfigIsXML;
-		pojavRendererName = profile.pojavRendererName;
-		controlFile = profile.controlFile;
-		resolution = profile.resolution;
-	}
 }

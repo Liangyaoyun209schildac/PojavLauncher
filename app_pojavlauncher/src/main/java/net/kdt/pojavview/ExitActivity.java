@@ -1,7 +1,5 @@
 package net.kdt.pojavview;
 
-import static net.kdt.pojavview.Tools.shareLog;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -25,9 +23,9 @@ public class ExitActivity extends AppCompatActivity {
             code = extras.getInt("code",-1);
         }
 
+        //TODO 添加错误日志显示
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.mcn_exit_title,code))
-                .setPositiveButton(R.string.main_share_logs, (dialog, which) -> shareLog(this))
                 .setOnDismissListener(dialog -> ExitActivity.this.finish())
                 .show();
     }

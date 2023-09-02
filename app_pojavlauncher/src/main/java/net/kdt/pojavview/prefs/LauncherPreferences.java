@@ -34,7 +34,6 @@ public class LauncherPreferences {
     public static boolean PREF_DISABLE_GESTURES = false;
     public static boolean PREF_DISABLE_SWAP_HAND = false;
     public static float PREF_MOUSESPEED = 1f;
-    public static String PREF_DEFAULT_RUNTIME;
     public static boolean PREF_SUSTAINED_PERFORMANCE = false;
     public static boolean PREF_VIRTUAL_MOUSE_START = false;
     public static boolean PREF_ARC_CAPES = false;
@@ -96,40 +95,6 @@ public class LauncherPreferences {
         PREF_DUMP_SHADERS = DEFAULT_PREF.getBoolean("dump_shaders", false);
         PREF_DEADZONE_SCALE = DEFAULT_PREF.getInt("gamepad_deadzone_scale", 100)/100f;
         PREF_BIG_CORE_AFFINITY = DEFAULT_PREF.getBoolean("bigCoreAffinity", false);
-
-        if(DEFAULT_PREF.contains("defaultRuntime")) {
-            PREF_DEFAULT_RUNTIME = DEFAULT_PREF.getString("defaultRuntime","");
-        }else{
-            if(MultiRTUtils.getRuntimes().size() < 1) {
-                PREF_DEFAULT_RUNTIME = "";
-                return;
-            }
-            PREF_DEFAULT_RUNTIME = MultiRTUtils.getRuntimes().get(0).name;
-            LauncherPreferences.DEFAULT_PREF.edit().putString("defaultRuntime",LauncherPreferences.PREF_DEFAULT_RUNTIME).apply();
-        }
-    }
-
-    /**
-     * This functions aims at finding the best default RAM amount,
-     * according to the RAM amount of the physical device.
-     * Put not enough RAM ? Minecraft will lag and crash.
-     * Put too much RAM ?
-     * The GC will lag, android won't be able to breathe properly.
-     * @param ctx Context needed to get the total memory of the device.
-     * @return The best default value found.
-     */
-    private static int findBestRAMAllocation(Context ctx){
-        int deviceRam = Tools.getTotalDeviceMemory(ctx);
-        if (deviceRam < 1024) return 300;
-        if (deviceRam < 1536) return 450;
-        if (deviceRam < 2048) return 600;
-        // Limit the max for 32 bits devices more harshly
-        if (is32BitsDevice()) return 700;
-
-        if (deviceRam < 3064) return 936;
-        if (deviceRam < 4096) return 1148;
-        if (deviceRam < 6144) return 1536;
-        return 2048; //Default RAM allocation for 64 bits
     }
 
     /** Compute the notch size to avoid being out of bounds */

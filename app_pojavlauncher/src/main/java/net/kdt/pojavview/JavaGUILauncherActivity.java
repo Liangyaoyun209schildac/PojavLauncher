@@ -152,15 +152,8 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             
             final File modFile = (File) getIntent().getExtras().getSerializable("modFile");
             final String javaArgs = getIntent().getExtras().getString("javaArgs");
-            String jreName = LauncherPreferences.PREF_DEFAULT_RUNTIME;
-            if(modFile != null) {
-                int javaVersion = getJavaVersion(modFile);
-                if(javaVersion != -1) {
-                    String autoselectRuntime = MultiRTUtils.getNearestJreName(javaVersion);
-                    if (autoselectRuntime != null) jreName = autoselectRuntime;
-                }
-            }
-            final Runtime runtime = MultiRTUtils.forceReread(jreName);
+            String jreName = getIntent().getExtras().getString("javaDir");
+            final Runtime runtime = MultiRTUtils.read(jreName);
 
             mSkipDetectMod = getIntent().getExtras().getBoolean("skipDetectMod", false);
             if(getIntent().getExtras().getBoolean("openLogOutput", false)) openLogOutput(null);

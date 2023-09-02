@@ -1,17 +1,13 @@
 package net.kdt.pojavview.tasks;
 
 
-import static net.kdt.pojavview.Architecture.archAsString;
 import static net.kdt.pojavview.PojavApplication.sExecutorService;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.kdt.mcgui.ProgressLayout;
-
 import net.kdt.pojavview.Tools;
-import net.kdt.pojavview.multirt.MultiRTUtils;
 
 import org.apache.commons.io.FileUtils;
 
@@ -26,21 +22,17 @@ public class AsyncAssetManager {
 
     /** Unpack single files, with no regard to version tracking */
     public static void unpackSingleFiles(Context ctx){
-        ProgressLayout.setProgress(ProgressLayout.EXTRACT_SINGLE_FILES, 0);
         sExecutorService.execute(() -> {
             try {
-                Tools.copyAssetFile(ctx, "options.txt", Tools.DIR_GAME_HOME, false);
                 Tools.copyAssetFile(ctx, "default.json", Tools.CTRLMAP_PATH, false);
                 Tools.copyAssetFile(ctx,"resolv.conf",Tools.DIR_DATA, false);
             } catch (IOException e) {
                 Log.e("AsyncAssetManager", "Failed to unpack critical components !");
             }
-            ProgressLayout.clearProgress(ProgressLayout.EXTRACT_SINGLE_FILES);
         });
     }
 
     public static void unpackComponents(Context ctx){
-        ProgressLayout.setProgress(ProgressLayout.EXTRACT_COMPONENTS, 0);
         sExecutorService.execute(() -> {
             try {
                 unpackComponent(ctx, "caciocavallo", false);
@@ -53,7 +45,6 @@ public class AsyncAssetManager {
             } catch (IOException e) {
                 Log.e("AsyncAssetManager", "Failed o unpack components !",e );
             }
-            ProgressLayout.clearProgress(ProgressLayout.EXTRACT_COMPONENTS);
         });
     }
 
