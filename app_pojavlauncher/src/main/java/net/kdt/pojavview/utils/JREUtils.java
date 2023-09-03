@@ -95,7 +95,7 @@ public class JREUtils {
 
     public static void redirectAndPrintJRELog() {
 
-        Log.v("jrelog","Log starts here");
+        Logger.appendToLog("Log starts here");
         new Thread(new Runnable(){
             int failTime = 0;
             ProcessBuilder logcatPb;
@@ -134,8 +134,7 @@ public class JREUtils {
                 }
             }
         }).start();
-        Log.i("jrelog-logcat","Logcat thread started");
-
+        Logger.appendToLog("Logcat thread started");
     }
 
     public static void relocateLibPath(Runtime runtime) {
@@ -275,10 +274,10 @@ public class JREUtils {
         List<String> userArgs = getJavaArgs(runtime.path, gameDirectory);
 
         //Remove arguments that can interfere with the good working of the launcher
-        purgeArg(userArgs,"-Xms");
-        purgeArg(userArgs,"-Xmx");
-        purgeArg(userArgs,"-d32");
-        purgeArg(userArgs,"-d64");
+        purgeArg(userArgs, "-Xms");
+        purgeArg(userArgs, "-Xmx");
+        purgeArg(userArgs, "-d32");
+        purgeArg(userArgs, "-d64");
         purgeArg(userArgs, "-Xint");
         purgeArg(userArgs, "-XX:+UseTransparentHugePages");
         purgeArg(userArgs, "-XX:+UseLargePagesInMetaspace");
@@ -286,18 +285,17 @@ public class JREUtils {
         purgeArg(userArgs, "-Dorg.lwjgl.opengl.libname");
 
         //Add automatically generated args
-        if(LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
+        if (LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
 
         userArgs.addAll(JVMArgs);
 
         initJavaRuntime(runtime.path);
         setupExitTrap(activity.getApplication());
         chdir(gameDirectory);
-        userArgs.add(0,"java"); //argv[0] is the program name according to C standard.
+        userArgs.add(0, "java"); //argv[0] is the program name according to C standard.
 
         Logger.appendToLog("Set Launch Args:");
-        for (String item : userArgs)
-        {
+        for (String item : userArgs) {
             Logger.appendToLog(item);
         }
 
@@ -326,7 +324,7 @@ public class JREUtils {
      */
     public static List<String> getJavaArgs(String runtimeHome, String gamedir) {
         String resolvFile;
-        resolvFile = new File(Tools.DIR_DATA,"resolv.conf").getAbsolutePath();
+        resolvFile = new File(Tools.COMPONENTS_DIR,"resolv.conf").getAbsolutePath();
 
         ArrayList<String> overridableArguments = new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + runtimeHome,
@@ -355,7 +353,7 @@ public class JREUtils {
                 "-Dfml.earlyprogresswindow=false" //Forge 1.14+ workaround
         ));
         if(LauncherPreferences.PREF_ARC_CAPES) {
-            overridableArguments.add("-javaagent:"+new File(Tools.DIR_DATA,"arc_dns_injector/arc_dns_injector.jar").getAbsolutePath()+"=23.95.137.176");
+            overridableArguments.add("-javaagent:"+new File(Tools.COMPONENTS_DIR,"arc_dns_injector/arc_dns_injector.jar").getAbsolutePath()+"=23.95.137.176");
         }
 
         return overridableArguments;

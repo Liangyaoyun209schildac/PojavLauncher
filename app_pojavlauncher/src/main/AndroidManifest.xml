@@ -27,7 +27,13 @@
             android:name="android.max_aspect"
             android:value="ratio_float" />
         <activity
-            android:name=".LauncherActivity" />
+                android:name=".LauncherActivity"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="ColorMC.Minecraft.Setting" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ImportControlActivity"
             android:configChanges="keyboard|keyboardHidden"
@@ -78,7 +84,7 @@
             android:exported="true"
             android:screenOrientation="sensorLandscape" >
             <intent-filter>
-                <action android:name="ColorMC.Minecraft" />
+                <action android:name="ColorMC.Minecraft.Launch" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

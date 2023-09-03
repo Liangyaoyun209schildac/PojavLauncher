@@ -18,43 +18,46 @@ import java.io.InputStream;
 
 public class AsyncAssetManager {
 
-    private AsyncAssetManager(){}
+    private AsyncAssetManager() {
+    }
 
-    /** Unpack single files, with no regard to version tracking */
-    public static void unpackSingleFiles(Context ctx){
+    /**
+     * Unpack single files, with no regard to version tracking
+     */
+    public static void unpackSingleFiles(Context ctx) {
         sExecutorService.execute(() -> {
             try {
                 Tools.copyAssetFile(ctx, "default.json", Tools.CTRLMAP_PATH, false);
-                Tools.copyAssetFile(ctx,"resolv.conf",Tools.DIR_DATA, false);
+                Tools.copyAssetFile(ctx, "resolv.conf", Tools.COMPONENTS_DIR, false);
             } catch (IOException e) {
                 Log.e("AsyncAssetManager", "Failed to unpack critical components !");
             }
         });
     }
 
-    public static void unpackComponents(Context ctx){
+    public static void unpackComponents(Context ctx) {
         sExecutorService.execute(() -> {
             try {
-                unpackComponent(ctx, "caciocavallo", false);
-                unpackComponent(ctx, "caciocavallo17", false);
+                unpackComponent(ctx, "caciocavallo");
+                unpackComponent(ctx, "caciocavallo17");
                 // Since the Java module system doesn't allow multiple JARs to declare the same module,
                 // we repack them to a single file here
-                unpackComponent(ctx, "lwjgl3", false);
-                unpackComponent(ctx, "security", true);
-                unpackComponent(ctx, "arc_dns_injector", true);
+                unpackComponent(ctx, "lwjgl3");
+                unpackComponent(ctx, "security");
+                unpackComponent(ctx, "arc_dns_injector");
             } catch (IOException e) {
-                Log.e("AsyncAssetManager", "Failed o unpack components !",e );
+                Log.e("AsyncAssetManager", "Failed o unpack components !", e);
             }
         });
     }
 
-    private static void unpackComponent(Context ctx, String component, boolean privateDirectory) throws IOException {
+    private static void unpackComponent(Context ctx, String component) throws IOException {
         AssetManager am = ctx.getAssets();
-        String rootDir = privateDirectory ? Tools.DIR_DATA : Tools.DIR_GAME_HOME;
+        String rootDir = Tools.COMPONENTS_DIR;
 
         File versionFile = new File(rootDir + "/" + component + "/version");
         InputStream is = am.open("components/" + component + "/version");
-        if(!versionFile.exists()) {
+        if (!versionFile.exists()) {
             if (versionFile.getParentFile().exists() && versionFile.getParentFile().isDirectory()) {
                 FileUtils.deleteDirectory(versionFile.getParentFile());
             }
@@ -62,7 +65,7 @@ public class AsyncAssetManager {
 
             Log.i("UnpackPrep", component + ": Pack was installed manually, or does not exist, unpacking new...");
             String[] fileList = am.list("components/" + component);
-            for(String s : fileList) {
+            for (String s : fileList) {
                 Tools.copyAssetFile(ctx, "components/" + component + "/" + s, rootDir + "/" + component, true);
             }
         } else {

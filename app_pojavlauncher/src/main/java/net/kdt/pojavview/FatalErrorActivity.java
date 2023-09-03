@@ -34,4 +34,14 @@ public class FatalErrorActivity extends AppCompatActivity {
 			.setCancelable(false)
 			.show();
 	}
+
+	public static void showError(Context ctx, String savePath, boolean storageAllow, Throwable th) {
+		Intent fatalErrorIntent = new Intent(ctx, FatalErrorActivity.class);
+		fatalErrorIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		fatalErrorIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		fatalErrorIntent.putExtra("throwable", th);
+		fatalErrorIntent.putExtra("savePath", savePath);
+		fatalErrorIntent.putExtra("storageAllow", storageAllow);
+		ctx.startActivity(fatalErrorIntent);
+	}
 }

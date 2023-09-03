@@ -293,9 +293,9 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             
             if (LauncherPreferences.PREF_JAVA_SANDBOX) {
                 Collections.reverse(javaArgList);
-                javaArgList.add("-Xbootclasspath/a:" + Tools.DIR_DATA + "/security/pro-grade.jar");
+                javaArgList.add("-Xbootclasspath/a:" + Tools.COMPONENTS_DIR + "/security/pro-grade.jar");
                 javaArgList.add("-Djava.security.manager=net.sourceforge.prograde.sm.ProGradeJSM");
-                javaArgList.add("-Djava.security.policy=" + Tools.DIR_DATA + "/security/java_sandbox.policy");
+                javaArgList.add("-Djava.security.policy=" + Tools.COMPONENTS_DIR + "/security/java_sandbox.policy");
                 Collections.reverse(javaArgList);
             }
 
