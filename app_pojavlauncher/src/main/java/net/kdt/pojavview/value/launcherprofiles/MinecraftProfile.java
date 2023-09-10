@@ -14,8 +14,5 @@ public class MinecraftProfile {
 	public boolean v2;
 	public String[] jvmArgs;
 	public String[] gameArgs;
-	public String logConfig;
-	public boolean logConfigIsXML;
-	public String pojavRendererName;
 	public String controlFile;
 }

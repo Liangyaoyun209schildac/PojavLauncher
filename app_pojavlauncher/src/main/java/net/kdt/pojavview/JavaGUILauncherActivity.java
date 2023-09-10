@@ -4,6 +4,7 @@ import static net.kdt.pojavview.MainActivity.fullyExit;
 
 import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -149,16 +150,15 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         try {
 
             placeMouseAt(CallbackBridge.physicalWidth / 2f, CallbackBridge.physicalHeight / 2f);
-            
-            final File modFile = (File) getIntent().getExtras().getSerializable("modFile");
-            final String javaArgs = getIntent().getExtras().getString("javaArgs");
-            String jreName = getIntent().getExtras().getString("javaDir");
+
+            final String[] javaArgs = getIntent().getExtras().getStringArray("JAVA_ARG");
+            String jreName = getIntent().getExtras().getString("JAVA_DIR");
             final Runtime runtime = MultiRTUtils.read(jreName);
 
             mSkipDetectMod = getIntent().getExtras().getBoolean("skipDetectMod", false);
             if(getIntent().getExtras().getBoolean("openLogOutput", false)) openLogOutput(null);
             if (mSkipDetectMod) {
-                new Thread(() -> launchJavaRuntime(runtime, modFile, javaArgs), "JREMainThread").start();
+                new Thread(() -> launchJavaRuntime(runtime, javaArgs), "JREMainThread").start();
                 return;
             }
 
@@ -166,11 +166,12 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             openLogOutput(null);
             new Thread(() -> {
                 try {
-                    final int exit = doCustomInstall(runtime, modFile, javaArgs);
-                    Logger.appendToLog(getString(R.string.toast_optifine_success));
-                    if (exit != 0) return;
+                    final int exit = doCustomInstall(runtime, javaArgs);
                     runOnUiThread(() -> {
-                        Toast.makeText(JavaGUILauncherActivity.this, R.string.toast_optifine_success, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent();
+                        intent.putExtra("res", exit == 0);
+                        setResult(RESULT_OK, intent);
+                        finish();
                         fullyExit();
                     });
 
@@ -200,8 +201,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         final View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(uiOptions);
     }
-
-
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -275,7 +274,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                 Toast.LENGTH_SHORT).show();
     }
 
-    public int launchJavaRuntime(Runtime runtime, File modFile, String javaArgs) {
+    public int launchJavaRuntime(Runtime runtime, String[] javaArgs) {
         JREUtils.redirectAndPrintJRELog();
         try {
             List<String> javaArgList = new ArrayList<>();
@@ -284,12 +283,8 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             Tools.getCacioJavaArgs(javaArgList,runtime.javaVersion == 8);
             
             if (javaArgs != null) {
-                javaArgList.addAll(Arrays.asList(javaArgs.split(" ")));
-            } else {
-                javaArgList.add("-jar");
-                javaArgList.add(modFile.getAbsolutePath());
+                javaArgList.addAll(Arrays.asList(javaArgs));
             }
-
             
             if (LauncherPreferences.PREF_JAVA_SANDBOX) {
                 Collections.reverse(javaArgList);
@@ -308,11 +303,9 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         }
     }
 
-
-
-    private int doCustomInstall(Runtime runtime, File modFile, String javaArgs) {
+    private int doCustomInstall(Runtime runtime, String[] javaArgs) {
         mSkipDetectMod = true;
-        return launchJavaRuntime(runtime, modFile, javaArgs);
+        return launchJavaRuntime(runtime, javaArgs);
     }
 
     public void toggleKeyboard(View view) {

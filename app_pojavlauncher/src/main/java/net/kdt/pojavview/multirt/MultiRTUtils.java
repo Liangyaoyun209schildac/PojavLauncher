@@ -29,9 +29,57 @@ public class MultiRTUtils {
     private static final String JAVA_VERSION_STR = "JAVA_VERSION=\"";
     private static final String OS_ARCH_STR = "OS_ARCH=\"";
 
-    public static void installRuntimeNamed(String path) throws IOException {
-        unpack200(Tools.NATIVE_LIB_DIR,path + "/");
+    public static void installRuntimeNamed(String path, InputStream runtimeInputStream) throws IOException {
+        File dest = new File(path);
+        if (dest.exists()) FileUtils.deleteDirectory(dest);
+        uncompressTarXZ(runtimeInputStream, dest);
+        runtimeInputStream.close();
+        unpack200(Tools.NATIVE_LIB_DIR, path + "/");
         MultiRTUtils.postPrepare(path);
+    }
+
+    public static void uncompressTarXZ(final InputStream tarFileInputStream, final File dest) throws IOException {
+        if(dest.isFile()) throw new IOException("Attempting to unpack into a file");
+        if(!dest.exists() && !dest.mkdirs()) throw new IOException("Failed to create destination directory");
+
+        byte[] buffer = new byte[8192];
+        TarArchiveInputStream tarIn = new TarArchiveInputStream(
+                new XZCompressorInputStream(tarFileInputStream)
+        );
+        TarArchiveEntry tarEntry = tarIn.getNextTarEntry();
+        // tarIn is a TarArchiveInputStream
+        while (tarEntry != null) {
+
+            final String tarEntryName = tarEntry.getName();
+
+            File destPath = new File(dest, tarEntry.getName());
+            File destParent = destPath.getParentFile();
+            if (tarEntry.isSymbolicLink()) {
+                if(destParent != null && !destParent.exists() && !destParent.mkdirs())
+                    throw new IOException("Failed to create parent directory for symlink");
+                try {
+                    // android.system.Os
+                    // Libcore one support all Android versions
+                    Os.symlink(tarEntry.getName(), tarEntry.getLinkName());
+                } catch (Throwable e) {
+                    Log.e("MultiRT", e.toString());
+                }
+
+            } else if (tarEntry.isDirectory()) {
+                if(!destPath.exists() && !destPath.mkdirs())
+                    throw new IOException("Failed to create directory");
+            } else if (!destPath.exists() || destPath.length() != tarEntry.getSize()) {
+                if(destParent != null && !destParent.exists() && !destParent.mkdirs())
+                    throw new IOException("Failed to create parent directory for file");
+
+                FileOutputStream os = new FileOutputStream(destPath);
+                IOUtils.copyLarge(tarIn, os, buffer);
+                os.close();
+
+            }
+            tarEntry = tarIn.getNextTarEntry();
+        }
+        tarIn.close();
     }
 
     public static void postPrepare(String path) throws IOException {

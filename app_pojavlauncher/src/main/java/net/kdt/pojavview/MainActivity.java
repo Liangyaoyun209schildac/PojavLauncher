@@ -175,11 +175,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             touchCharInput.setCharacterSender(new LwjglCharSender());
 
-            if(minecraftProfile.pojavRendererName != null) {
-                Log.i("RdrDebug","__P_renderer="+minecraftProfile.pojavRendererName);
-                Tools.LOCAL_RENDERER = minecraftProfile.pojavRendererName;
-            }
-
             setTitle("Minecraft " + minecraftProfile.version);
 
             // Minecraft 1.13+
