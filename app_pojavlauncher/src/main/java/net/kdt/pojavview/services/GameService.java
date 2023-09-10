@@ -45,7 +45,7 @@ public class GameService extends Service {
                 .addAction(android.R.drawable.ic_menu_close_clear_cancel,  getString(R.string.notification_terminate), pendingKillIntent)
                 .setSmallIcon(R.drawable.notif_icon)
                 .setNotificationSilent();
-       startForeground(2, notificationBuilder.build());
+        startForeground(2, notificationBuilder.build());
         return START_NOT_STICKY; // non-sticky so android wont try restarting the game after the user uses the "Quit" button
     }
 
