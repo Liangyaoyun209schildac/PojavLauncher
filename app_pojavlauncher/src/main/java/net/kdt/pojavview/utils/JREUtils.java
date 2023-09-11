@@ -10,6 +10,7 @@ import static net.kdt.pojavview.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
 import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
+import android.net.Uri;
 import android.os.Build;
 import android.system.*;
 import android.util.*;
@@ -20,7 +21,6 @@ import java.util.*;
 import net.kdt.pojavview.*;
 import net.kdt.pojavview.extra.ExtraConstants;
 import net.kdt.pojavview.extra.ExtraCore;
-import net.kdt.pojavview.multirt.MultiRTUtils;
 import net.kdt.pojavview.multirt.Runtime;
 import net.kdt.pojavview.plugins.FFmpegPlugin;
 import net.kdt.pojavview.prefs.*;
@@ -307,8 +307,13 @@ public class JREUtils {
             activity.runOnUiThread(() -> {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
                 dialog.setMessage(activity.getString(R.string.mcn_exit_title, exitCode));
-
-                dialog.setPositiveButton(R.string.main_share_logs, (p1, p2) -> {
+                dialog.setPositiveButton(R.string.main_open_logs, (p1, p2) -> {
+                    Intent intent = new Intent("android.intent.action.VIEW");
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
+                    Uri uri2 = Uri.fromFile(latestLogFile);
+                    intent.setDataAndType(uri2, "text/plain");
                     MainActivity.fullyExit();
                 });
                 dialog.show();

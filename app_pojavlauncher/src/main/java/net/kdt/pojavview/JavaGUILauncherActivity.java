@@ -50,12 +50,15 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     private ImageView mMousePointerImageView;
     private GestureDetector mGestureDetector;
 
-    private boolean mSkipDetectMod, mIsVirtualMouseEnabled;
+    private boolean mIsVirtualMouseEnabled;
     
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        new JREUtils();
+
         setContentView(R.layout.activity_java_gui_launcher);
 
         try {
@@ -155,12 +158,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             String jreName = getIntent().getExtras().getString("JAVA_DIR");
             final Runtime runtime = MultiRTUtils.read(jreName);
 
-            mSkipDetectMod = getIntent().getExtras().getBoolean("skipDetectMod", false);
             if(getIntent().getExtras().getBoolean("openLogOutput", false)) openLogOutput(null);
-            if (mSkipDetectMod) {
-                new Thread(() -> launchJavaRuntime(runtime, javaArgs), "JREMainThread").start();
-                return;
-            }
 
             // No skip detection
             openLogOutput(null);
@@ -172,7 +170,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                         intent.putExtra("res", exit == 0);
                         setResult(RESULT_OK, intent);
                         finish();
-                        fullyExit();
+                        //fullyExit();
                     });
 
                 } catch (Throwable e) {
@@ -184,8 +182,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         } catch (Throwable th) {
             Tools.showError(this, th, true);
         }
-
-
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -304,7 +300,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     }
 
     private int doCustomInstall(Runtime runtime, String[] javaArgs) {
-        mSkipDetectMod = true;
         return launchJavaRuntime(runtime, javaArgs);
     }
 

@@ -35,7 +35,7 @@
     <string name="alerttitle_installmod">Select a mod installer</string>
 
     <!-- Error messages -->
-    <string name="error_fatal">PojavLauncher has unexpectedly crashed</string>
+    <string name="error_fatal">Unexpectedly crashed</string>
     <string name="error_no_version">No version!</string>
     <string name="error_show_more">Show more</string>
     <string name="error_show_less">Show less</string>
@@ -212,7 +212,7 @@
     <string name="customctrl_selectdefault">Select default Control json</string>
     <string name="customctrl_export">Export control</string>
 
-    <string name="main_share_logs">Share log file</string>
+    <string name="main_open_logs">Open log file</string>
     <string name="main_install_jar_file">Install .jar</string>
     <string name="main_options">Options</string>
     <string name="main_play">Play</string>
