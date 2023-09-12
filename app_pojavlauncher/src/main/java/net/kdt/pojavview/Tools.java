@@ -43,8 +43,6 @@ import com.google.gson.GsonBuilder;
 
 import net.kdt.pojavview.multirt.MultiRTUtils;
 import net.kdt.pojavview.multirt.Runtime;
-import net.kdt.pojavview.plugins.FFmpegPlugin;
-import net.kdt.pojavview.prefs.LauncherPreferences;
 import net.kdt.pojavview.utils.JREUtils;
 import net.kdt.pojavview.utils.OldVersionsUtils;
 import net.kdt.pojavview.value.launcherprofiles.MinecraftProfile;
@@ -130,7 +128,6 @@ public final class Tools {
         javaArgList.add(minecraftProfile.mainclass);
         javaArgList.addAll(Arrays.asList(minecraftProfile.gameArgs));
         // ctx.appendlnToLog("full args: "+javaArgList.toString());
-        FFmpegPlugin.discover(activity);
         JREUtils.launchJavaVM(activity, runtime, minecraftProfile.gameDir, javaArgList);
     }
 

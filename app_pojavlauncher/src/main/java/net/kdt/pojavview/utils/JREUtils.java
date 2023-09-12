@@ -22,7 +22,6 @@ import net.kdt.pojavview.*;
 import net.kdt.pojavview.extra.ExtraConstants;
 import net.kdt.pojavview.extra.ExtraCore;
 import net.kdt.pojavview.multirt.Runtime;
-import net.kdt.pojavview.plugins.FFmpegPlugin;
 import net.kdt.pojavview.prefs.*;
 import org.lwjgl.glfw.*;
 
@@ -151,19 +150,15 @@ public class JREUtils {
         }
 
         String libName = is64BitsDevice() ? "lib64" : "lib";
-        StringBuilder ldLibraryPath = new StringBuilder();
-        if(FFmpegPlugin.isAvailable) {
-            ldLibraryPath.append(FFmpegPlugin.libraryPath).append(":");
-        }
-        ldLibraryPath.append(runtime.path)
-                .append("/").append(Tools.DIRNAME_HOME_JRE)
-                .append("/jli:").append(runtime.path).append("/").append(Tools.DIRNAME_HOME_JRE)
-                .append(":");
-        ldLibraryPath.append("/system/").append(libName).append(":")
-                .append("/vendor/").append(libName).append(":")
-                .append("/vendor/").append(libName).append("/hw:")
-                .append(NATIVE_LIB_DIR);
-        LD_LIBRARY_PATH = ldLibraryPath.toString();
+
+        LD_LIBRARY_PATH = runtime.path +
+                "/" + Tools.DIRNAME_HOME_JRE +
+                "/jli:" + runtime.path + "/" + Tools.DIRNAME_HOME_JRE +
+                ":" +
+                "/system/" + libName + ":" +
+                "/vendor/" + libName + ":" +
+                "/vendor/" + libName + "/hw:" +
+                NATIVE_LIB_DIR;
     }
 
     public static void setJavaEnvironment(String jreHome) throws Throwable {
@@ -202,9 +197,6 @@ public class JREUtils {
 
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
-        if(FFmpegPlugin.isAvailable) {
-            envMap.put("PATH", FFmpegPlugin.libraryPath+":"+envMap.get("PATH"));
-        }
 
         envMap.put("REGAL_GL_VENDOR", "Android");
         envMap.put("REGAL_GL_RENDERER", "Regal");
