@@ -37,7 +37,7 @@
 						  android:layout_gravity="center_horizontal"
 						  android:id="@+id/main_forge_mem"
 						  android:text="123MB/400MB"/>
-				<ProgressBar android:layout_width="100dp"
+				<ProgressBar android:layout_width="300dp"
 							 style="@android:style/Widget.ProgressBar.Horizontal"
 							 android:progress="20"
 							 android:max="100"
@@ -47,7 +47,7 @@
 						  android:layout_height="wrap_content"
 						  android:id="@+id/main_forge_p1"
 						  android:text="123MB/400MB"/>
-				<ProgressBar android:layout_width="100dp"
+				<ProgressBar android:layout_width="300dp"
 							 style="@android:style/Widget.ProgressBar.Horizontal"
 							 android:progress="20"
 							 android:max="100"
@@ -57,7 +57,7 @@
 						  android:layout_height="wrap_content"
 						  android:id="@+id/main_forge_p2"
 						  android:text="123MB/400MB"/>
-				<ProgressBar android:layout_width="100dp"
+				<ProgressBar android:layout_width="300dp"
 							 style="@android:style/Widget.ProgressBar.Horizontal"
 							 android:progress="20"
 							 android:max="100"

@@ -1277,17 +1277,15 @@ public class GLFW
     }
 
     /** Array version of: {@link #glfwGetMonitorPhysicalSize GetMonitorPhysicalSize} */
-/*
     public static void glfwGetMonitorPhysicalSize(@NativeType("GLFWmonitor *") long monitor, @Nullable @NativeType("int *") int[] widthMM, @Nullable @NativeType("int *") int[] heightMM) {
-        long __functionAddress = Functions.GetMonitorPhysicalSize;
         if (CHECKS) {
             // check(monitor);
             checkSafe(widthMM, 1);
             checkSafe(heightMM, 1);
         }
-        invokePPPV(monitor, widthMM, heightMM, __functionAddress);
+        widthMM[0] = mGLFWWindowWidth;
+        heightMM[0] = mGLFWWindowHeight;
     }
-*/
 
     /** Array version of: {@link #glfwGetMonitorContentScale GetMonitorContentScale} */
 /*
