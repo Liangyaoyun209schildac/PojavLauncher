@@ -102,7 +102,7 @@ public final class Tools {
         NATIVE_LIB_DIR = ctx.getApplicationInfo().nativeLibraryDir;
     }
 
-    public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile) throws Throwable {
+    public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile, int port) throws Throwable {
         Runtime runtime = MultiRTUtils.read(minecraftProfile.javaDir);
         if (runtime == null) {
             Logger.appendToLog("No find runtime in: " + minecraftProfile.javaDir);
@@ -115,7 +115,9 @@ public final class Tools {
         OldVersionsUtils.selectOpenGlVersion(minecraftProfile.time);
 
         List<String> javaArgList = new ArrayList<>();
-
+        if (port != 0) {
+            javaArgList.add("-DColorMC.Socket=" + port);
+        }
         getCacioJavaArgs(javaArgList, minecraftProfile.jvmVersion == 8);
 
         String cp = getLWJGL3ClassPath() + ":" + minecraftProfile.classpath;

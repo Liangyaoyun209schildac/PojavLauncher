@@ -26,6 +26,55 @@
 				android:layout_height="fill_parent"
 				/>
 
+			<LinearLayout android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:layout_gravity="center"
+						  android:visibility="gone"
+						  android:id="@+id/main_forge_display"
+						  android:orientation="vertical">
+				<TextView android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:layout_gravity="center_horizontal"
+						  android:id="@+id/main_forge_mem"
+						  android:text="123MB/400MB"/>
+				<ProgressBar android:layout_width="100dp"
+							 style="@android:style/Widget.ProgressBar.Horizontal"
+							 android:progress="20"
+							 android:max="100"
+							 android:id="@+id/main_forge_mem1"
+							 android:layout_height="20dp"/>
+				<TextView android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:id="@+id/main_forge_p1"
+						  android:text="123MB/400MB"/>
+				<ProgressBar android:layout_width="100dp"
+							 style="@android:style/Widget.ProgressBar.Horizontal"
+							 android:progress="20"
+							 android:max="100"
+							 android:id="@+id/main_forge_p11"
+							 android:layout_height="20dp"/>
+				<TextView android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:id="@+id/main_forge_p2"
+						  android:text="123MB/400MB"/>
+				<ProgressBar android:layout_width="100dp"
+							 style="@android:style/Widget.ProgressBar.Horizontal"
+							 android:progress="20"
+							 android:max="100"
+							 android:id="@+id/main_forge_p21"
+							 android:layout_height="20dp"/>
+				<TextView android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:id="@+id/main_forge_p3"
+						  android:text="123MB/400MB"/>
+				<ProgressBar android:layout_width="100dp"
+							 style="@android:style/Widget.ProgressBar.Horizontal"
+							 android:progress="20"
+							 android:max="100"
+							 android:id="@+id/main_forge_p31"
+							 android:layout_height="20dp"/>
+			</LinearLayout>
+
 			<net.kdt.pojavview.Touchpad
 				android:layout_height="match_parent"
 				android:layout_width="match_parent"
