@@ -24,9 +24,10 @@ public class SocketDisplay {
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     private final IForgeUpdate update;
-    public SocketDisplay(IForgeUpdate runnable)
-    {
+
+    public SocketDisplay(IForgeUpdate runnable) {
         update = runnable;
+        new Thread(this::start).start();
     }
 
     public void start() {
