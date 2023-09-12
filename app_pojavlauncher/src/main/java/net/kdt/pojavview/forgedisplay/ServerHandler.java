@@ -30,10 +30,12 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
             case 2:
             case 3:
                 boolean have = byteBuf.readBoolean();
-                title = readString(byteBuf);
-                message = readString(byteBuf);
-                step = byteBuf.readInt();
-                steps = byteBuf.readInt();
+                if (have) {
+                    title = readString(byteBuf);
+                    message = readString(byteBuf);
+                    step = byteBuf.readInt();
+                    steps = byteBuf.readInt();
+                }
                 update.forgeUpdate(type, have, title, message, step, steps, maxMemory, totalMemory, freeMemory);
                 break;
             case 5:
@@ -42,8 +44,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    public String readString(ByteBuf buffer)
-    {
+    public String readString(ByteBuf buffer) {
         int length = buffer.readInt();
         if (length == 0)
             return "";

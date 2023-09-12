@@ -318,6 +318,8 @@ public class JREUtils {
                 });
                 dialog.show();
             });
+        } else {
+            MainActivity.fullyExit();
         }
         return exitCode;
     }
