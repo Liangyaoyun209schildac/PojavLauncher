@@ -64,7 +64,6 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     public static TouchCharInput touchCharInput;
     private MinecraftGLSurface minecraftGLView;
     private static Touchpad touchpad;
-
     private LoggerView loggerView;
     private DrawerLayout drawerLayout;
     private ListView navDrawer;
@@ -88,6 +87,14 @@ public class GameActivity extends BaseActivity implements ControlButtonMenuListe
     private ProgressBar forgeP1P;
     private ProgressBar forgeP2P;
     private ProgressBar forgeP3P;
+
+    public static IForgeUpdate socketDisplay;
+
+    public GameActivity()
+    {
+        Log.i("socketDisplay", "Set handel");
+        socketDisplay = this::forgeUpdate;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
