@@ -1,5 +1,7 @@
 package net.kdt.pojavview;
 
+import static net.kdt.pojavview.MainActivity.fullyExit;
+
 import android.annotation.SuppressLint;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -67,7 +69,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         }catch (IOException e) {
             Tools.showError(this, e, true);
         }
-        GameActivity.GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        MainActivity.GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         mTouchCharInput = findViewById(R.id.awt_touch_char);
         mTouchCharInput.setCharacterSender(new AwtCharSender());
 
@@ -183,7 +185,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
         getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                GameActivity.dialogForceClose(JavaGUILauncherActivity.this);
+                MainActivity.dialogForceClose(JavaGUILauncherActivity.this);
             }
         });
     }
@@ -253,7 +255,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     }
 
     public void forceClose(View v) {
-        GameActivity.dialogForceClose(this);
+        MainActivity.dialogForceClose(this);
     }
 
     public void openLogOutput(View v) {

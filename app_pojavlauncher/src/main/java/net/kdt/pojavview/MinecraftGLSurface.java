@@ -1,6 +1,6 @@
 package net.kdt.pojavview;
 
-import static net.kdt.pojavview.GameActivity.touchCharInput;
+import static net.kdt.pojavview.MainActivity.touchCharInput;
 import static net.kdt.pojavview.prefs.LauncherPreferences.PREF_DISABLE_SWAP_HAND;
 import static net.kdt.pojavview.utils.MCOptionUtils.getMcScale;
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
@@ -615,7 +615,7 @@ public class MinecraftGLSurface extends View implements GrabListener {
     }
 
     private void updateGrabState(boolean isGrabbing) {
-        if(!GameActivity.isAndroid8OrHigher()) return;
+        if(!MainActivity.isAndroid8OrHigher()) return;
 
         boolean hasPointerCapture = hasPointerCapture();
         if(isGrabbing){

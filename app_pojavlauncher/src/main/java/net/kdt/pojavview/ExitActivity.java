@@ -35,7 +35,7 @@ public class ExitActivity extends AppCompatActivity {
                     File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
                     Uri uri2 = Uri.fromFile(latestLogFile);
                     intent.setDataAndType(uri2, "text/plain");
-                    GameActivity.fullyExit();
+                    MainActivity.fullyExit();
                 })
                 .setOnDismissListener(dialog -> ExitActivity.this.finish())
                 .show();
