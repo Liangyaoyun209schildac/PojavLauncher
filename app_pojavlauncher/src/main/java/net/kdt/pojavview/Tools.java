@@ -24,7 +24,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,7 +43,6 @@ import com.google.gson.GsonBuilder;
 import net.kdt.pojavview.multirt.MultiRTUtils;
 import net.kdt.pojavview.multirt.Runtime;
 import net.kdt.pojavview.plugins.FFmpegPlugin;
-import net.kdt.pojavview.prefs.LauncherPreferences;
 import net.kdt.pojavview.utils.JREUtils;
 import net.kdt.pojavview.utils.OldVersionsUtils;
 import net.kdt.pojavview.value.launcherprofiles.MinecraftProfile;
@@ -102,7 +100,13 @@ public final class Tools {
         NATIVE_LIB_DIR = ctx.getApplicationInfo().nativeLibraryDir;
     }
 
-    public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile, int port) throws Throwable {
+    public static void forgeUpdate(int type, boolean have, String title, String message, int step,
+                                   int steps, int maxMemory, int totalMemory, int freeMemory)
+    {
+        GameActivity.socketDisplay.forgeUpdate(type, have, title, message, step, steps, maxMemory, totalMemory, freeMemory);
+    }
+
+    public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile) throws Throwable {
         Runtime runtime = MultiRTUtils.read(minecraftProfile.javaDir);
         if (runtime == null) {
             Logger.appendToLog("No find runtime in: " + minecraftProfile.javaDir);
@@ -115,9 +119,6 @@ public final class Tools {
         OldVersionsUtils.selectOpenGlVersion(minecraftProfile.time);
 
         List<String> javaArgList = new ArrayList<>();
-        if (port != 0) {
-            javaArgList.add("-DColorMC.Socket=" + port);
-        }
         getCacioJavaArgs(javaArgList, minecraftProfile.jvmVersion == 8);
 
         String cp = getLWJGL3ClassPath() + ":" + minecraftProfile.classpath;
@@ -327,8 +328,8 @@ public final class Tools {
                     .setMessage(errMsg)
                     .setPositiveButton(android.R.string.ok, (p1, p2) -> {
                         if(exitIfOk) {
-                            if (ctx instanceof MainActivity) {
-                                MainActivity.fullyExit();
+                            if (ctx instanceof GameActivity) {
+                                GameActivity.fullyExit();
                             } else if (ctx instanceof Activity) {
                                 ((Activity) ctx).finish();
                             }
@@ -339,8 +340,8 @@ public final class Tools {
                         ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                         mgr.setPrimaryClip(ClipData.newPlainText("error", Log.getStackTraceString(e)));
                         if(exitIfOk) {
-                            if (ctx instanceof MainActivity) {
-                                MainActivity.fullyExit();
+                            if (ctx instanceof GameActivity) {
+                                GameActivity.fullyExit();
                             } else {
                                 ((Activity) ctx).finish();
                             }

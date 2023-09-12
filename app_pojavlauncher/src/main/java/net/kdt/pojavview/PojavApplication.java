@@ -1,14 +1,7 @@
 package net.kdt.pojavview;
 
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
-
-import android.Manifest;
-import android.app.*;
 import android.content.*;
-import android.content.pm.*;
-import android.content.res.*;
 import android.os.*;
-import androidx.core.app.*;
 
 import android.util.*;
 import java.io.*;
@@ -19,9 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import androidx.core.content.ContextCompat;
 import net.kdt.pojavview.tasks.AsyncAssetManager;
-import net.kdt.pojavview.utils.*;
 
 public class PojavApplication {
 
@@ -52,7 +43,7 @@ public class PojavApplication {
 			}
 
 			FatalErrorActivity.showError(context, crashFile.getAbsolutePath(), true, th);
-			MainActivity.fullyExit();
+			GameActivity.fullyExit();
 		});
 
 		Tools.DIR_CACHE = context.getCacheDir();

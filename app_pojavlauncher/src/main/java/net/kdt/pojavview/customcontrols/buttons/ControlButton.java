@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import net.kdt.pojavview.LwjglGlfwKeycode;
-import net.kdt.pojavview.MainActivity;
+import net.kdt.pojavview.GameActivity;
 import net.kdt.pojavview.R;
 import net.kdt.pojavview.customcontrols.ControlData;
 import net.kdt.pojavview.customcontrols.ControlLayout;
@@ -203,15 +203,15 @@ public class ControlButton extends TextView implements ControlInterface {
     private void sendSpecialKey(int keycode, boolean isDown){
         switch (keycode) {
             case ControlData.SPECIALBTN_KEYBOARD:
-                if(isDown) MainActivity.switchKeyboardState();
+                if(isDown) GameActivity.switchKeyboardState();
                 break;
 
             case ControlData.SPECIALBTN_TOGGLECTRL:
-                if(isDown)MainActivity.mControlLayout.toggleControlVisible();
+                if(isDown) GameActivity.mControlLayout.toggleControlVisible();
                 break;
 
             case ControlData.SPECIALBTN_VIRTUALMOUSE:
-                if(isDown) MainActivity.toggleMouse(getContext());
+                if(isDown) GameActivity.toggleMouse(getContext());
                 break;
 
             case ControlData.SPECIALBTN_MOUSEPRI:

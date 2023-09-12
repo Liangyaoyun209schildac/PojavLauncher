@@ -44,7 +44,7 @@ import net.kdt.pojavview.customcontrols.CustomControls;
 import net.kdt.pojavview.customcontrols.EditorExitable;
 import net.kdt.pojavview.customcontrols.keyboard.LwjglCharSender;
 import net.kdt.pojavview.customcontrols.keyboard.TouchCharInput;
-import net.kdt.pojavview.forgedisplay.SocketDisplay;
+import net.kdt.pojavview.forgedisplay.IForgeUpdate;
 import net.kdt.pojavview.prefs.LauncherPreferences;
 import net.kdt.pojavview.services.GameService;
 import net.kdt.pojavview.utils.JREUtils;
@@ -56,7 +56,7 @@ import org.lwjgl.glfw.CallbackBridge;
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable {
+public class GameActivity extends BaseActivity implements ControlButtonMenuListener, EditorExitable {
     public static volatile ClipboardManager GLOBAL_CLIPBOARD;
 
     volatile public static boolean isInputStackCall;
@@ -78,8 +78,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public ArrayAdapter<String> ingameControlsEditorArrayAdapter;
     public AdapterView.OnItemClickListener ingameControlsEditorListener;
 
-    private SocketDisplay socketDisplay;
-
     private LinearLayout forgeDisplay;
     private TextView forgeMem;
     private TextView forgeP1;
@@ -89,6 +87,14 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     private ProgressBar forgeP1P;
     private ProgressBar forgeP2P;
     private ProgressBar forgeP3P;
+
+    public static IForgeUpdate socketDisplay;
+
+    public GameActivity()
+    {
+        Log.i("socketDisplay", "Set handel");
+        socketDisplay = this::forgeUpdate;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,10 +114,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         minecraftProfile.classpath = intent.getStringExtra("CLASSPATH");
         minecraftProfile.javaDir = intent.getStringExtra("JAVA_DIR");
         minecraftProfile.v2 = intent.getBooleanExtra("GAME_V2", false);
-
-        if("1.12.2".equals(minecraftProfile.version)) {
-            socketDisplay = new SocketDisplay(this::forgeUpdate);
-        }
 
 //        StringBuilder arg1 = new StringBuilder();
 //        for (String item: minecraftProfile.jvmArgs) {
@@ -171,13 +173,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         mControlLayout.setModifiable(false);
     }
 
-    @SuppressLint("SetTextI18n")
-    private void forgeUpdate(int type, boolean have, String title, String message, int step,
-                             int steps, int maxMemory, int totalMemory, int freeMemory) {
+    public void forgeUpdate(int type, boolean have, String title, String message, int step,
+                            int steps, int maxMemory, int totalMemory, int freeMemory) {
         Tools.runOnUiThread(() -> {
             if (type == 5) {
                 forgeDisplay.setVisibility(View.GONE);
-                socketDisplay.close();
                 return;
             }
 
@@ -278,7 +278,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
                     android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.menu_ingame));
             gameActionClickListener = (parent, view, position, id) -> {
                 switch(position) {
-                    case 0: dialogForceClose(MainActivity.this); break;
+                    case 0: dialogForceClose(GameActivity.this); break;
                     case 1: openLogOutput(); break;
                     case 2: dialogSendCustomKey(); break;
                     case 3: adjustMouseSpeedLive(); break;
@@ -346,7 +346,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         drawerLayout = findViewById(R.id.main_drawer_options);
         navDrawer = findViewById(R.id.main_navigation_view);
         loggerView = findViewById(R.id.mainLoggerView);
-        mControlLayout = findViewById(R.id.main_control_layout);
         touchCharInput = findViewById(R.id.mainTouchCharInput);
         mDrawerPullButton = findViewById(R.id.drawer_button);
 
@@ -447,7 +446,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             checkVulkanZinkIsSupported();
         }
         JREUtils.redirectAndPrintJRELog();
-        Tools.launchMinecraft(this, minecraftProfile, socketDisplay.port);
+        Tools.launchMinecraft(this, minecraftProfile);
     }
 
     private void printLauncherInfo(String gameVersion, MinecraftProfile profile) {
@@ -717,10 +716,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     @Override
     public void exitEditor() {
         try {
-            MainActivity.mControlLayout.loadLayout((CustomControls)null);
-            MainActivity.mControlLayout.setModifiable(false);
+            GameActivity.mControlLayout.loadLayout((CustomControls)null);
+            GameActivity.mControlLayout.setModifiable(false);
             System.gc();
-            MainActivity.mControlLayout.loadLayout(
+            GameActivity.mControlLayout.loadLayout(
                     minecraftProfile.controlFile == null
                             ? LauncherPreferences.PREF_DEFAULTCTRL_PATH
                             : Tools.CTRLMAP_PATH + "/" + minecraftProfile.controlFile);
