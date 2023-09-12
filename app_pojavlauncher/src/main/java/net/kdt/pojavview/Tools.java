@@ -40,6 +40,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.kdt.pojavview.forgedisplay.IForgeUpdate;
 import net.kdt.pojavview.multirt.MultiRTUtils;
 import net.kdt.pojavview.multirt.Runtime;
 import net.kdt.pojavview.plugins.FFmpegPlugin;
@@ -85,6 +86,8 @@ public final class Tools {
     public static String CTRLDEF_FILE;
     public static final int RUN_MOD_INSTALLER = 2050;
 
+    public static IForgeUpdate socketDisplay;
+
     /**
      * Since some constant requires the use of the Context object
      * You can call this function to initialize them.
@@ -98,12 +101,6 @@ public final class Tools {
         CTRLMAP_PATH = DIR_GAME_HOME + "/controlmap";
         CTRLDEF_FILE = DIR_GAME_HOME + "/controlmap/default.json";
         NATIVE_LIB_DIR = ctx.getApplicationInfo().nativeLibraryDir;
-    }
-
-    public static void forgeUpdate(int type, boolean have, String title, String message, int step,
-                                   int steps, int maxMemory, int totalMemory, int freeMemory)
-    {
-        GameActivity.socketDisplay.forgeUpdate(type, have, title, message, step, steps, maxMemory, totalMemory, freeMemory);
     }
 
     public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile) throws Throwable {
