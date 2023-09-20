@@ -1,11 +1,14 @@
 package net.kdt.pojavview.scoped;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.pm.ProviderInfo;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.graphics.Point;
 import android.os.CancellationSignal;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.DocumentsContract.Document;
@@ -44,8 +47,14 @@ public class FolderProvider extends DocumentsProvider {
 
     private static final String ALL_MIME_TYPES = "*/*";
 
-    private static final File BASE_DIR = new File(Tools.DIR_GAME_HOME);
+    private static File BASE_DIR;
 
+    @Override
+    public void attachInfo(Context context, ProviderInfo info) {
+        BASE_DIR = new File(context.getExternalFilesDir(null).getAbsolutePath());
+        Log.i("FolderProvider", "Set Dir:" + BASE_DIR);
+        super.attachInfo(context, info);
+    }
 
     // The default columns to return information about a root if no specific
     // columns are requested in a query.

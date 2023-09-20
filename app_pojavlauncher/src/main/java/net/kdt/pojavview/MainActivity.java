@@ -447,8 +447,10 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             checkVulkanZinkIsSupported();
         }
         JREUtils.redirectAndPrintJRELog();
-        Tools.launchMinecraft(this, minecraftProfile, socketDisplay == null ? 0 : socketDisplay.port);
-        MainActivity.fullyExit();
+        int res = Tools.launchMinecraft(this, minecraftProfile, socketDisplay == null ? 0 : socketDisplay.port);
+        if(res == 0) {
+            MainActivity.fullyExit();
+        }
     }
 
     private void printLauncherInfo(String gameVersion, MinecraftProfile profile) {

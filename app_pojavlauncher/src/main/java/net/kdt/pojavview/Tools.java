@@ -100,11 +100,11 @@ public final class Tools {
         NATIVE_LIB_DIR = ctx.getApplicationInfo().nativeLibraryDir;
     }
 
-    public static void launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile, int port) throws Throwable {
+    public static int launchMinecraft(final Activity activity, MinecraftProfile minecraftProfile, int port) throws Throwable {
         Runtime runtime = MultiRTUtils.read(minecraftProfile.javaDir);
         if (runtime == null) {
             Logger.appendToLog("No find runtime in: " + minecraftProfile.javaDir);
-            return;
+            return -1;
         }
         Logger.appendToLog("Use runtime: " + runtime.path + "\n" +
                 "Runtime:" + runtime.versionString);
@@ -128,7 +128,7 @@ public final class Tools {
         javaArgList.add(minecraftProfile.mainclass);
         javaArgList.addAll(Arrays.asList(minecraftProfile.gameArgs));
         // ctx.appendlnToLog("full args: "+javaArgList.toString());
-        JREUtils.launchJavaVM(activity, runtime, minecraftProfile.gameDir, javaArgList);
+        return JREUtils.launchJavaVM(activity, runtime, minecraftProfile.gameDir, javaArgList);
     }
 
     public static void buildNotificationChannel(Context context){

@@ -38,7 +38,7 @@ public class LauncherPreferences {
     public static boolean PREF_VIRTUAL_MOUSE_START = false;
     public static boolean PREF_ARC_CAPES = false;
     public static boolean PREF_USE_ALTERNATE_SURFACE = true;
-    public static boolean PREF_JAVA_SANDBOX = true;
+    public static boolean PREF_JAVA_SANDBOX = false;
     public static int PREF_SCALE_FACTOR = 100;
     public static boolean PREF_ENABLE_GYRO = false;
     public static float PREF_GYRO_SENSITIVITY = 1f;
@@ -82,7 +82,7 @@ public class LauncherPreferences {
         PREF_VIRTUAL_MOUSE_START = DEFAULT_PREF.getBoolean("mouse_start", false);
         PREF_ARC_CAPES = DEFAULT_PREF.getBoolean("arc_capes",false);
         PREF_USE_ALTERNATE_SURFACE = DEFAULT_PREF.getBoolean("alternate_surface", false);
-        PREF_JAVA_SANDBOX = DEFAULT_PREF.getBoolean("java_sandbox", true);
+        PREF_JAVA_SANDBOX = DEFAULT_PREF.getBoolean("java_sandbox", false);
         PREF_SCALE_FACTOR = DEFAULT_PREF.getInt("resolutionRatio", 100);
         PREF_ENABLE_GYRO = DEFAULT_PREF.getBoolean("enableGyro", false);
         PREF_GYRO_SENSITIVITY = ((float)DEFAULT_PREF.getInt("gyroSensitivity", 100))/100f;
