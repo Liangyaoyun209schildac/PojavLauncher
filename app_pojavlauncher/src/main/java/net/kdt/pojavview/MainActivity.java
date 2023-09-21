@@ -441,11 +441,15 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         if(Tools.LOCAL_RENDERER == null) {
             Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
         }
+        if(!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
+            Tools.RenderersList renderersList = Tools.getCompatibleRenderers(this);
+            String firstCompatibleRenderer = renderersList.rendererIds.get(0);
+            Log.w("runCraft","Incompatible renderer "+Tools.LOCAL_RENDERER+ " will be replaced with "+firstCompatibleRenderer);
+            Tools.LOCAL_RENDERER = firstCompatibleRenderer;
+            Tools.releaseRenderersCache();
+        }
         Logger.appendToLog("--------- beginning with launcher debug");
         printLauncherInfo(versionId, minecraftProfile);
-        if (Tools.LOCAL_RENDERER.equals("vulkan_zink")) {
-            checkVulkanZinkIsSupported();
-        }
         JREUtils.redirectAndPrintJRELog();
         int res = Tools.launchMinecraft(this, minecraftProfile, socketDisplay == null ? 0 : socketDisplay.port);
         if(res == 0) {
