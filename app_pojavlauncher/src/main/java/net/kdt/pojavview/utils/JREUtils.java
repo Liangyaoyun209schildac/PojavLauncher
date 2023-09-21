@@ -321,7 +321,7 @@ public class JREUtils {
      */
     public static List<String> getJavaArgs(String runtimeHome, String gamedir) {
         String resolvFile;
-        resolvFile = new File(Tools.COMPONENTS_DIR,"resolv.conf").getAbsolutePath();
+        resolvFile = new File(Tools.COMPONENTS_DIR, "resolv.conf").getAbsolutePath();
 
         ArrayList<String> overridableArguments = new ArrayList<>(Arrays.asList(
                 "-Djava.home=" + runtimeHome,
@@ -340,17 +340,17 @@ public class JREUtils {
                 //"-Dorg.lwjgl.util.DebugFunctions=true",
                 //"-Dorg.lwjgl.util.DebugLoader=true",
                 // GLFW Stub width height
-                "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR/100F),
-                "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR/100F),
+                "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
+                "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR / 100F),
                 "-Dglfwstub.initEgl=false",
-                "-Dext.net.resolvPath=" +resolvFile,
+                "-Dext.net.resolvPath=" + resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
                 "-Dnet.minecraft.clientmodname=" + Tools.APP_NAME,
                 "-Dfml.earlyprogresswindow=false" //Forge 1.14+ workaround
         ));
-        if(LauncherPreferences.PREF_ARC_CAPES) {
-            overridableArguments.add("-javaagent:"+new File(Tools.COMPONENTS_DIR,"arc_dns_injector/arc_dns_injector.jar").getAbsolutePath()+"=23.95.137.176");
+        if (LauncherPreferences.PREF_ARC_CAPES) {
+            overridableArguments.add("-javaagent:" + new File(Tools.COMPONENTS_DIR, "arc_dns_injector/arc_dns_injector.jar").getAbsolutePath() + "=23.95.137.176");
         }
 
         return overridableArguments;
