@@ -2,8 +2,8 @@
 // Created by maks on 21.09.2022.
 //
 #include <EGL/egl.h>
-#ifndef POJAVVIEW_EGL_LOADER_H
-#define POJAVVIEW_EGL_LOADER_H
+#ifndef POJAVLAUNCHER_EGL_LOADER_H
+#define POJAVLAUNCHER_EGL_LOADER_H
 
 extern EGLBoolean (*eglMakeCurrent_p) (EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx);
 extern EGLBoolean (*eglDestroyContext_p) (EGLDisplay dpy, EGLContext ctx);
@@ -26,4 +26,4 @@ extern EGLSurface (*eglGetCurrentSurface_p) (EGLint readdraw);
 
 void dlsym_EGL();
 
-#endif //POJAVVIEW_EGL_LOADER_H
+#endif //POJAVLAUNCHER_EGL_LOADER_H

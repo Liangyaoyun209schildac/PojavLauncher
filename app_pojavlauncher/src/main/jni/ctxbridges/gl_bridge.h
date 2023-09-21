@@ -3,8 +3,8 @@
 //
 #include <EGL//egl.h>
 #include <stdbool.h>
-#ifndef POJAVVIEW_GL_BRIDGE_H
-#define POJAVVIEW_GL_BRIDGE_H
+#ifndef POJAVLAUNCHER_GL_BRIDGE_H
+#define POJAVLAUNCHER_GL_BRIDGE_H
 
 typedef struct {
     char       state;
@@ -24,4 +24,4 @@ void gl_setup_window();
 void gl_swap_interval(int swapInterval);
 
 
-#endif //POJAVVIEW_GL_BRIDGE_H
+#endif //POJAVLAUNCHER_GL_BRIDGE_H
