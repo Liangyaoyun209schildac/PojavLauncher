@@ -279,6 +279,8 @@ public class JREUtils {
         //Add automatically generated args
         if (LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
 
+        Log.i("Game render", "use render " + LOCAL_RENDERER);
+
         userArgs.addAll(JVMArgs);
 
         initJavaRuntime(runtime.path);
@@ -306,7 +308,7 @@ public class JREUtils {
                     File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
                     Uri uri2 = Uri.fromFile(latestLogFile);
                     intent.setDataAndType(uri2, "text/plain");
-                    MainActivity.fullyExit();
+                    //MainActivity.fullyExit();
                 });
                 dialog.show();
             });
