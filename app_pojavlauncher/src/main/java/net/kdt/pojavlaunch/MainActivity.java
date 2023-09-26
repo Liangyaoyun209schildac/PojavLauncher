@@ -108,29 +108,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             socketDisplay = new SocketDisplay(this::forgeUpdate);
         }
 
-//        StringBuilder arg1 = new StringBuilder();
-//        for (String item: minecraftProfile.jvmArgs) {
-//            arg1.append(item).append("\n");
-//        }
-//
-//        StringBuilder arg2 = new StringBuilder();
-//        for (String item: minecraftProfile.gameArgs) {
-//            arg2.append(item).append("\n");
-//        }
-//
-//        File crashFile = new File(Tools.DIR_DATA, "latestcrash.txt");
-//        FatalErrorActivity.showError(this, crashFile.getAbsolutePath(), true, new Exception(
-//                "GAME_DIR:" + minecraftProfile.gameDir + "\n" +
-//                        "GAME_VERSION:" + minecraftProfile.version + "\n" +
-//                        "GAME_TIME:" + minecraftProfile.time + "\n" +
-//                        "JVM_VERSION:" + minecraftProfile.jvmVersion + "\n" +
-//                        "MAINCLASS:" + minecraftProfile.mainclass + "\n" +
-//                        "CLASSPATH:" + minecraftProfile.classpath + "\n" +
-//                        "GAME_V2:" + minecraftProfile.v2 + "\n" +
-//                        "JAVA_ARG:" + arg1 + "\n" +
-//                        "GAME_ARG:" + arg2
-//        ));
-
         MCOptionUtils.load(minecraftProfile.gameDir);
         GameService.startService(this);
         initLayout(R.layout.activity_basemain);
@@ -152,11 +129,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             switch(position) {
                 case 0: mControlLayout.addControlButton(new ControlData("New")); break;
                 case 1: mControlLayout.addDrawer(new ControlDrawerData()); break;
-                case 2: mControlLayout.addJoystickButton(new ControlJoystickData()); break;
-                case 3: mControlLayout.openLoadDialog(); break;
-                case 4: mControlLayout.openSaveDialog(this); break;
-                case 5: mControlLayout.openSetDefaultDialog(); break;
-                case 6: mControlLayout.openExitDialog(this);
+                //case 2: mControlLayout.addJoystickButton(new ControlJoystickData()); break;
+                case 2: mControlLayout.openLoadDialog(); break;
+                case 3: mControlLayout.openSaveDialog(this); break;
+                case 4: mControlLayout.openSetDefaultDialog(); break;
+                case 5: mControlLayout.openExitDialog(this);
             }
         };
 
