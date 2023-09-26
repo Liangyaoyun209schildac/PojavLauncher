@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 
-import net.kdt.pojavview.R;
+import net.kdt.pojavlaunch.R;
 
 import fr.spse.extended_view.ExtendedButton;
 

@@ -1,6 +1,6 @@
 package org.lwjgl.glfw;
 
-import net.kdt.pojavview.*;
+import net.kdt.pojavlaunch.*;
 import android.content.*;
 import android.view.Choreographer;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import android.util.*;
 
 import androidx.core.content.res.ResourcesCompat;
 
-import net.kdt.pojavview.R;
+import net.kdt.pojavlaunch.R;
 
 public class MineButton extends androidx.appcompat.widget.AppCompatButton {
 	

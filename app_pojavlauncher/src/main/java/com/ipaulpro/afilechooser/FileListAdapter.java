@@ -19,7 +19,7 @@ package com.ipaulpro.afilechooser;
 import android.content.*;
 import android.view.*;
 import android.widget.*;
-import net.kdt.pojavview.R;
+import net.kdt.pojavlaunch.R;
 
 import java.io.*;
 import java.util.*;

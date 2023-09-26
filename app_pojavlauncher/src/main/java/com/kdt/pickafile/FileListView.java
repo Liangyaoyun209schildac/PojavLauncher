@@ -8,7 +8,7 @@ import android.widget.*;
 import com.ipaulpro.afilechooser.*;
 import java.io.*;
 import java.util.*;
-import net.kdt.pojavview.*;
+import net.kdt.pojavlaunch.*;
 import android.os.*;
 
 public class FileListView extends LinearLayout
