@@ -13,6 +13,7 @@ import android.app.*;
 import android.content.*;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.DocumentsContract;
 import android.system.*;
 import android.util.*;
 
@@ -308,13 +309,7 @@ public class JREUtils {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
                 dialog.setMessage(activity.getString(R.string.mcn_exit_title, exitCode));
                 dialog.setPositiveButton(R.string.main_open_logs, (p1, p2) -> {
-                    Intent intent = new Intent("android.intent.action.VIEW");
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
-                    Uri uri2 = Uri.fromFile(latestLogFile);
-                    intent.setDataAndType(uri2, "text/plain");
-                    activity.startActivity(intent);
+                    Tools.openFile(activity);
 
                     //MainActivity.fullyExit();
                 });

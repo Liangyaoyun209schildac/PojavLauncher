@@ -29,13 +29,7 @@ public class ExitActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.mcn_exit_title,code))
                 .setPositiveButton(R.string.main_open_logs, (p1, p2) -> {
-                    Intent intent = new Intent("android.intent.action.VIEW");
-                    intent.addCategory("android.intent.category.DEFAULT");
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
-                    Uri uri2 = Uri.fromFile(latestLogFile);
-                    intent.setDataAndType(uri2, "text/plain");
-                    startActivity(intent);
+                    Tools.openFile(this);
 
                     //MainActivity.fullyExit();
                 })

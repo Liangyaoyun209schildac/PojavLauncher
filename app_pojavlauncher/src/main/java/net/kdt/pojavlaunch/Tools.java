@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -540,5 +541,15 @@ public final class Tools {
 
     public static void runOnUiThread(Runnable runnable) {
         MAIN_HANDLER.post(runnable);
+    }
+
+    public static void openFile(Activity activity)
+    {
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Uri contentUri = DocumentsContract.buildDocumentUri(activity.getString(R.string.storageProviderAuthorities), Tools.DIR_GAME_HOME + "/latestlog.txt");
+        intent.setDataAndType(contentUri, "text/plain");
+        activity.startActivity(intent);
     }
 }
