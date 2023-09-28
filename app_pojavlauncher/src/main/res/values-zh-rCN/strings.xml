@@ -86,7 +86,7 @@
     <string name="mcl_setting_renderer_gles2_4">Holy GL4ES - (全版本可用，速度较快)</string>
     <string name="mcl_setting_renderer_virgl">virglrenderer - (1.7 及以上版本可用，速度较慢)</string>
     <string name="mcl_setting_renderer_vgpu">vgpu - (1.16.5 及以下版本可用，速度较快)</string>
-    <string name="mcl_setting_renderer_vulkan_zink">zink - (beta 版 b1.8 及以上可用，速度较慢)</string>
+    <string name="mcl_setting_renderer_vulkan_zink">Zink（Vulkan）-（所有版本、中）</string>
     <string name="mcl_setting_renderer_angle">ANGLE - (1.17 及以上版本可用，速度一般)</string>
     <string name="mcl_setting_category_veroption">将在版本列表中显示的版本类型</string>
     <string name="mcl_setting_veroption_release">正式版</string>
@@ -115,7 +115,7 @@
     <string name="mcn_exit_call">退出</string>
     <string name="mcn_exit_confirm">确定强制关闭？</string>
     <string name="mcn_check_fail_lwjgl">未安装 LWJGL3！</string>
-    <string name="mcn_check_fail_vulkan_support">此设备不支持 Vulkan Zink 渲染器！</string>
+    <string name="mcn_check_fail_vulkan_support">此设备不支持 Zink（Vulkan）渲染器！</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">界面</string>
     <string name="control_keyboard">键盘</string>
@@ -316,4 +316,7 @@
     <string name="mcl_setting_title_buttonallcaps">在按钮标签中仅使用大写字母</string>
     <string name="mcl_setting_subtitle_buttonallcaps">如果您想在控件中使用小写字母，请禁用此功能</string>
     <string name="create_profile">创建新配置</string>
+
+    <string name="preference_vulkan_driver_system_title">使用系统 Vulkan 驱动</string>
+    <string name="preference_vulkan_driver_system_description">强制启动器在 Adreno GPU 上使用系统 Vulkan 驱动而非 Turnip。仅影响使用 Vulkan 的 Zink 和模组。</string>
 </resources>

@@ -6,6 +6,7 @@ import static net.kdt.pojavlaunch.Tools.LOCAL_RENDERER;
 import static net.kdt.pojavlaunch.Tools.NATIVE_LIB_DIR;
 import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_DUMP_SHADERS;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_ZINK_PREFER_SYSTEM_DRIVER;
 
 import android.annotation.SuppressLint;
 import android.app.*;
@@ -169,6 +170,9 @@ public class JREUtils {
         envMap.put("TMPDIR", Tools.DIR_CACHE.getAbsolutePath());
         envMap.put("LIBGL_MIPMAP", "3");
 
+        // Prevent OptiFine (and other error-reporting stuff in Minecraft) from balooning the log
+        envMap.put("LIBGL_NOERROR", "1");
+
         // On certain GLES drivers, overloading default functions shader hack fails, so disable it
         envMap.put("LIBGL_NOINTOVLHACK", "1");
 
@@ -177,6 +181,8 @@ public class JREUtils {
 
         if(PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
+        if(PREF_ZINK_PREFER_SYSTEM_DRIVER)
+            envMap.put("POJAV_ZINK_PREFER_SYSTEM_DRIVER", "1");
 
 
         // The OPEN GL version is changed according
@@ -351,7 +357,8 @@ public class JREUtils {
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
                 "-Dnet.minecraft.clientmodname=" + Tools.APP_NAME,
-                "-Dfml.earlyprogresswindow=false" //Forge 1.14+ workaround
+                "-Dfml.earlyprogresswindow=false", //Forge 1.14+ workaround
+                "-Dloader.disable_forked_guis=true"
         ));
         if (LauncherPreferences.PREF_ARC_CAPES) {
             overridableArguments.add("-javaagent:" + new File(Tools.COMPONENTS_DIR, "arc_dns_injector/arc_dns_injector.jar").getAbsolutePath() + "=23.95.137.176");

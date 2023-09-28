@@ -99,6 +99,11 @@ public class ControlLayout extends FrameLayout {
 
 		mLayout = controlLayout;
 
+		// Joystick(s)
+		for(ControlJoystickData joystick : mLayout.mJoystickDataList){
+			addJoystickView(joystick);
+		}
+
 		//CONTROL BUTTON
 		for (ControlData button : controlLayout.mControlDataList) {
 			addControlView(button);
@@ -109,12 +114,6 @@ public class ControlLayout extends FrameLayout {
 			ControlDrawer drawer = addDrawerView(drawerData);
 			if(mModifiable) drawer.areButtonsVisible = true;
 		}
-
-		// Joystick(s)
-		for(ControlJoystickData joystick : mLayout.mJoystickDataList){
-			addJoystickView(joystick);
-		}
-
 
 		mLayout.scaledAt = LauncherPreferences.PREF_BUTTONSIZE;
 
