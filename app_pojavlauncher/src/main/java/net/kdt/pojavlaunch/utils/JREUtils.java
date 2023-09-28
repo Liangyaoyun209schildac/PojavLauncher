@@ -310,7 +310,7 @@ public class JREUtils {
                     intent.setDataAndType(uri2, "text/plain");
                     activity.startActivity(intent);
 
-                    MainActivity.fullyExit();
+                    //MainActivity.fullyExit();
                 });
                 dialog.show();
             });

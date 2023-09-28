@@ -36,7 +36,8 @@ public class ExitActivity extends AppCompatActivity {
                     Uri uri2 = Uri.fromFile(latestLogFile);
                     intent.setDataAndType(uri2, "text/plain");
                     startActivity(intent);
-                    MainActivity.fullyExit();
+
+                    //MainActivity.fullyExit();
                 })
                 .setOnDismissListener(dialog -> ExitActivity.this.finish())
                 .show();
