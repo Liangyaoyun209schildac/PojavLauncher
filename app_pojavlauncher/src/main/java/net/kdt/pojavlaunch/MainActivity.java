@@ -227,7 +227,8 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         try {
-            File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
+            String file = getIntent().getStringExtra("LOG_FILE");
+            File latestLogFile = new File(file);
             if(!latestLogFile.exists() && !latestLogFile.createNewFile())
                 throw new IOException("Failed to create a new log file");
             Logger.begin(latestLogFile.getAbsolutePath());
@@ -421,33 +422,20 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
             Tools.releaseRenderersCache();
         }
         Logger.appendToLog("--------- beginning with launcher debug");
-        printLauncherInfo(versionId, minecraftProfile);
+        printLauncherInfo(versionId);
         JREUtils.redirectAndPrintJRELog();
         int res = Tools.launchMinecraft(this, minecraftProfile, socketDisplay == null ? 0 : socketDisplay.port);
-        if(res == 0) {
-            MainActivity.fullyExit();
-        }
+        Intent intent = new Intent();
+        intent.putExtra("res", res);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
-    private void printLauncherInfo(String gameVersion, MinecraftProfile profile) {
-        //Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
+    private void printLauncherInfo(String gameVersion) {
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(Tools.DEVICE_ARCHITECTURE));
         Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " + Build.MODEL);
         Logger.appendToLog("Info: API version: " + Build.VERSION.SDK_INT);
         Logger.appendToLog("Info: Selected Minecraft version: " + gameVersion);
-        Logger.appendToLog("Info: Game arguments: " + profile.gameArgs.length);
-        for (String item : profile.gameArgs) {
-            Logger.appendToLog(item);
-        }
-
-        Logger.appendToLog("Info: Java arguments: " + profile.jvmArgs.length);
-        for (String item : profile.jvmArgs) {
-            Logger.appendToLog(item);
-        }
-        Logger.appendToLog("Info: MainClass: " + profile.mainclass);
-        Logger.appendToLog("Info: ClassPath: " + profile.classpath);
-        Logger.appendToLog("Info: Game Dir: " + profile.gameDir);
-        Logger.appendToLog("Info: Jvm Version: " + profile.jvmVersion);
     }
 
     private void checkVulkanZinkIsSupported() {
