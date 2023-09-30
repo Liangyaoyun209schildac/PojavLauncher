@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import net.kdt.pojavlaunch.Logger;
+import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.R;
 
 /**
@@ -25,7 +26,7 @@ public class LoggerView extends ConstraintLayout {
     private ToggleButton mToggleButton;
     private ScrollView mScrollView;
     private TextView mLogTextView;
-
+    private boolean enable;
 
     public LoggerView(@NonNull Context context) {
         this(context, null);
@@ -46,7 +47,7 @@ public class LoggerView extends ConstraintLayout {
     /**
      * Inflate the layout, and add component behaviors
      */
-    private void init(){
+    private void init() {
         inflate(getContext(), R.layout.view_logger, this);
         mLogTextView = findViewById(R.id.content_log_view);
         mLogTextView.setTypeface(Typeface.MONOSPACE);
@@ -60,12 +61,11 @@ public class LoggerView extends ConstraintLayout {
         mToggleButton.setOnCheckedChangeListener(
                 (compoundButton, isChecked) -> {
                     mLogTextView.setVisibility(isChecked ? VISIBLE : GONE);
-                    if(isChecked) {
-                        Logger.setLogListener(mLogListener);
-                    }else{
+                    if (isChecked) {
+                        enable = true;
+                    } else {
                         mLogTextView.setText("");
-                        Logger.setLogListener(null); // Makes the JNI code be able to skip expensive logger callbacks
-                        // NOTE: was tested by rapidly smashing the log on/off button, no sync issues found :)
+                        enable = false;
                     }
                 });
         mToggleButton.setChecked(false);
@@ -79,13 +79,19 @@ public class LoggerView extends ConstraintLayout {
 
         // Listen to logs
         mLogListener = text -> {
-            if(mLogTextView.getVisibility() != VISIBLE) return;
+            if (PojavApplication.TopLogger != null) {
+                PojavApplication.TopLogger.onEventLogged(text);
+            }
+            if(!enable) return;
+            if (mLogTextView.getVisibility() != VISIBLE) return;
             post(() -> {
                 mLogTextView.append(text + '\n');
                 mScrollView.fullScroll(View.FOCUS_DOWN);
             });
 
         };
+
+        Logger.setLogListener(mLogListener);
     }
 
 }

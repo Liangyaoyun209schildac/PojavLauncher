@@ -40,6 +40,8 @@ import net.kdt.pojavlaunch.customcontrols.*;
 import net.kdt.pojavlaunch.customcontrols.keyboard.LwjglCharSender;
 import net.kdt.pojavlaunch.customcontrols.keyboard.TouchCharInput;
 import net.kdt.pojavlaunch.forgedisplay.SocketDisplay;
+import net.kdt.pojavlaunch.multirt.MultiRTUtils;
+import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.services.GameService;
 import net.kdt.pojavlaunch.utils.JREUtils;
@@ -104,13 +106,15 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         minecraftProfile.javaDir = intent.getStringExtra("JAVA_DIR");
         minecraftProfile.v2 = intent.getBooleanExtra("GAME_V2", false);
 
+        String logfile = intent.getStringExtra("LOG_FILE");
+
         if("1.12.2".equals(minecraftProfile.version)) {
             socketDisplay = new SocketDisplay(this::forgeUpdate);
         }
 
         MCOptionUtils.load(minecraftProfile.gameDir);
         GameService.startService(this);
-        initLayout(R.layout.activity_basemain);
+        initLayout(R.layout.activity_basemain, logfile);
         CallbackBridge.addGrabListener(touchpad);
         CallbackBridge.addGrabListener(minecraftGLView);
         if(LauncherPreferences.PREF_ENABLE_GYRO) mGyroControl = new GyroControl(this);
@@ -218,7 +222,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         });
     }
 
-    protected void initLayout(int resId) {
+    protected void initLayout(int resId, String logfile) {
         setContentView(resId);
         bindValues();
         mControlLayout.setMenuListener(this);
@@ -227,10 +231,11 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         try {
-            File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
-            if(!latestLogFile.exists() && !latestLogFile.createNewFile())
+            File latestLogFile = new File(logfile);
+            if (!latestLogFile.exists() && !latestLogFile.createNewFile())
                 throw new IOException("Failed to create a new log file");
             Logger.begin(latestLogFile.getAbsolutePath());
+
             // FIXME: is it safe for multi thread?
             GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             touchCharInput.setCharacterSender(new LwjglCharSender());
@@ -410,44 +415,30 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     }
 
     private void runCraft(String versionId) throws Throwable {
-        if(Tools.LOCAL_RENDERER == null) {
+        if (Tools.LOCAL_RENDERER == null) {
             Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
         }
-        if(!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
+        if (!Tools.checkRendererCompatible(this, Tools.LOCAL_RENDERER)) {
             Tools.RenderersList renderersList = Tools.getCompatibleRenderers(this);
             String firstCompatibleRenderer = renderersList.rendererIds.get(0);
-            Log.w("runCraft","Incompatible renderer "+Tools.LOCAL_RENDERER+ " will be replaced with "+firstCompatibleRenderer);
+            Log.w("runCraft", "Incompatible renderer " + Tools.LOCAL_RENDERER + " will be replaced with " + firstCompatibleRenderer);
             Tools.LOCAL_RENDERER = firstCompatibleRenderer;
             Tools.releaseRenderersCache();
         }
-        Logger.appendToLog("--------- beginning with launcher debug");
-        printLauncherInfo(versionId, minecraftProfile);
+        printLauncherInfo(versionId);
         JREUtils.redirectAndPrintJRELog();
         int res = Tools.launchMinecraft(this, minecraftProfile, socketDisplay == null ? 0 : socketDisplay.port);
-        if(res == 0) {
-            MainActivity.fullyExit();
-        }
+        Intent intent = new Intent();
+        intent.putExtra("res", res);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
-    private void printLauncherInfo(String gameVersion, MinecraftProfile profile) {
-        //Logger.appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
+    private void printLauncherInfo(String gameVersion) {
         Logger.appendToLog("Info: Architecture: " + Architecture.archAsString(Tools.DEVICE_ARCHITECTURE));
         Logger.appendToLog("Info: Device model: " + Build.MANUFACTURER + " " + Build.MODEL);
         Logger.appendToLog("Info: API version: " + Build.VERSION.SDK_INT);
         Logger.appendToLog("Info: Selected Minecraft version: " + gameVersion);
-        Logger.appendToLog("Info: Game arguments: " + profile.gameArgs.length);
-        for (String item : profile.gameArgs) {
-            Logger.appendToLog(item);
-        }
-
-        Logger.appendToLog("Info: Java arguments: " + profile.jvmArgs.length);
-        for (String item : profile.jvmArgs) {
-            Logger.appendToLog(item);
-        }
-        Logger.appendToLog("Info: MainClass: " + profile.mainclass);
-        Logger.appendToLog("Info: ClassPath: " + profile.classpath);
-        Logger.appendToLog("Info: Game Dir: " + profile.gameDir);
-        Logger.appendToLog("Info: Jvm Version: " + profile.jvmVersion);
     }
 
     private void checkVulkanZinkIsSupported() {

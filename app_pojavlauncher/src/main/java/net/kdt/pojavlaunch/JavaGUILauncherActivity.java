@@ -59,14 +59,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
         setContentView(R.layout.activity_java_gui_launcher);
 
-        try {
-            File latestLogFile = new File(Tools.DIR_GAME_HOME, "latestlog.txt");
-            if (!latestLogFile.exists() && !latestLogFile.createNewFile())
-                throw new IOException("Failed to create a new log file");
-            Logger.begin(latestLogFile.getAbsolutePath());
-        }catch (IOException e) {
-            Tools.showError(this, e, true);
-        }
         MainActivity.GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         mTouchCharInput = findViewById(R.id.awt_touch_char);
         mTouchCharInput.setCharacterSender(new AwtCharSender());
@@ -152,11 +144,17 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
             placeMouseAt(CallbackBridge.physicalWidth / 2f, CallbackBridge.physicalHeight / 2f);
 
-            final String[] javaArgs = getIntent().getExtras().getStringArray("JAVA_ARG");
-            String jreName = getIntent().getExtras().getString("JAVA_DIR");
+            Bundle bundle = getIntent().getExtras();
+
+            final String[] javaArgs = bundle.getStringArray("JAVA_ARG");
+            String jreName = bundle.getString("JAVA_DIR");
+            String logfile = bundle.getString("LOG_FILE");
             final Runtime runtime = MultiRTUtils.read(jreName);
 
-            if(getIntent().getExtras().getBoolean("openLogOutput", false)) openLogOutput(null);
+            File latestLogFile = new File(logfile);
+            if (!latestLogFile.exists() && !latestLogFile.createNewFile())
+                throw new IOException("Failed to create a new log file");
+            Logger.begin(latestLogFile.getAbsolutePath());
 
             // No skip detection
             openLogOutput(null);
@@ -168,7 +166,6 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
                         intent.putExtra("res", exit == 0);
                         setResult(RESULT_OK, intent);
                         finish();
-                        //fullyExit();
                     });
 
                 } catch (Throwable e) {
@@ -274,12 +271,12 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
             List<String> javaArgList = new ArrayList<>();
 
             // Enable Caciocavallo
-            Tools.getCacioJavaArgs(javaArgList,runtime.javaVersion == 8);
-            
+            Tools.getCacioJavaArgs(javaArgList, runtime.javaVersion == 8);
+
             if (javaArgs != null) {
                 javaArgList.addAll(Arrays.asList(javaArgs));
             }
-            
+
             if (LauncherPreferences.PREF_JAVA_SANDBOX) {
                 Collections.reverse(javaArgList);
                 javaArgList.add("-Xbootclasspath/a:" + Tools.COMPONENTS_DIR + "/security/pro-grade.jar");
@@ -290,7 +287,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
 
             Logger.appendToLog("Info: Java arguments: " + Arrays.toString(javaArgList.toArray(new String[0])));
 
-            return JREUtils.launchJavaVM(this, runtime, getIntent().getStringExtra("GAME_DIR"),javaArgList);
+            return JREUtils.launchJavaVM(this, runtime, getIntent().getStringExtra("GAME_DIR"), javaArgList);
         } catch (Throwable th) {
             Tools.showError(this, th, true);
             return -1;

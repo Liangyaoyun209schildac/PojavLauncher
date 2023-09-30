@@ -295,7 +295,7 @@ public class JREUtils {
         chdir(gameDirectory);
         userArgs.add(0, "java"); //argv[0] is the program name according to C standard.
 
-        Logger.appendToLog("Set Launch Args:");
+        Logger.appendToLog("Launch Args:");
         for (String item : userArgs) {
             Logger.appendToLog(item);
         }
