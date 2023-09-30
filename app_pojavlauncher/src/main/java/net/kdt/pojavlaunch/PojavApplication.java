@@ -15,9 +15,6 @@ import java.util.concurrent.TimeUnit;
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 
 public class PojavApplication {
-
-	public static Logger.eventLogListener TopLogger;
-
 	public static final ExecutorService sExecutorService = new ThreadPoolExecutor(4, 4, 500, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
 	public static void Init(Context context) {
