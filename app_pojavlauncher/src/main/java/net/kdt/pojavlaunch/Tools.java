@@ -129,6 +129,7 @@ public final class Tools {
 
         javaArgList.add(minecraftProfile.mainclass);
         javaArgList.addAll(Arrays.asList(minecraftProfile.gameArgs));
+        // ctx.appendlnToLog("full args: "+javaArgList.toString());
         return JREUtils.launchJavaVM(activity, runtime, minecraftProfile.gameDir, javaArgList);
     }
 

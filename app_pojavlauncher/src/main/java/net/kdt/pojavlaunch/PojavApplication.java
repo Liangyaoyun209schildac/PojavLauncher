@@ -16,7 +16,7 @@ import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
 
 public class PojavApplication {
 
-	public static Logger.eventLogListener TopLogger;
+	private static final int REQUEST_STORAGE_REQUEST_CODE = 1;
 
 	public static final ExecutorService sExecutorService = new ThreadPoolExecutor(4, 4, 500, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
