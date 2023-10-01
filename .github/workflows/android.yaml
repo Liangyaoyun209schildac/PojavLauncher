@@ -24,7 +24,8 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-
+    - name: Create version file
+      run: mkdir /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/ && touch /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/version
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew && chmod +x scripts/languagelist_updater.sh
     - name: Build
