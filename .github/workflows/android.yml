@@ -75,7 +75,6 @@ jobs:
         run: |
           # Build the launcher
           gradle :app_pojavlauncher:assembleDebug
-          ls -alhR
           cp app_pojavlauncher/build/outputs/* out/app-debug.apk
           
 
