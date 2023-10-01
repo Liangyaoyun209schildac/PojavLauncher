@@ -24,7 +24,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '8'
-
+      - name: Create version file
+        run: mkdir /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/ && touch /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/version
       - name: Get JRE 8
         uses: dawidd6/action-download-artifact@v2
         with:
