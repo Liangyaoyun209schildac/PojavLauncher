@@ -68,7 +68,7 @@ import java.util.List;
 @SuppressWarnings("IOStreamConstructor")
 public final class Tools {
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-    public static String APP_NAME = "null";
+    public static String APP_NAME = "ColorMC";
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
     public static String NATIVE_LIB_DIR;
@@ -129,7 +129,7 @@ public final class Tools {
 
         javaArgList.add(minecraftProfile.mainclass);
         javaArgList.addAll(Arrays.asList(minecraftProfile.gameArgs));
-        // ctx.appendlnToLog("full args: "+javaArgList.toString());
+
         return JREUtils.launchJavaVM(activity, runtime, minecraftProfile.gameDir, javaArgList);
     }
 
