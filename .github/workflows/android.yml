@@ -76,14 +76,14 @@ jobs:
           # Build the launcher
           gradle :app_pojavlauncher:assembleDebug
           ls -alhR
-          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
+          
 
       - name: Build APK without runtime
         run: |
           rm -r app_pojavlauncher/src/main/assets/components/jre
           rm -r app_pojavlauncher/src/main/assets/components/jre-new
           gradle assembleDebug
-          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug-noruntime.apk
+          
       - name: Gen md5sums
         run: |
           md5sum out/app-debug.apk > out/app-debug.md5
@@ -93,7 +93,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-debug
-          path: out/app-debug.*
+          path: build/
       
       - name: Upload AAB
         uses: actions/upload-artifact@v3
