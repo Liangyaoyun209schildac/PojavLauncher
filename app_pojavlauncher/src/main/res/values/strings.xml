@@ -131,7 +131,7 @@
     <string name="global_retry">Retry</string>
 
     <!-- MainActivity: strings -->
-    <string name="mcn_exit_title">Application/Game exited with code %1$d, check latestlog.txt for more details.</string>
+    <string name="mcn_exit_title">Application/Game exited with code %1$d.</string>
     <string name="mcn_exit_call">Exit</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 was not installed!</string>
