@@ -75,7 +75,7 @@ jobs:
         run: |
           # Build the launcher
           gradle :app_pojavlauncher:assembleDebug
-          cp app_pojavlauncher/build/outputs/* out/
+          cp -rf app_pojavlauncher/build/outputs/* out/
           
 
       - name: Build APK without runtime
