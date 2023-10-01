@@ -90,7 +90,6 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        LocaleUtils.setLocale(this);
         PojavApplication.init(this);
 
         minecraftProfile = new MinecraftProfile();
