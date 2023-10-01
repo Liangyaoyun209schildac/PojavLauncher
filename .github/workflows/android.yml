@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Create version file
-        run: mkdir /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/ && touch /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/version
+        run: mkdir /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/ && touch /home/runner/work/PojavLauncher/PojavLauncher/jre_lwjgl3glfw/build/version && mkdir /home/runner/work/PojavLauncher/PojavLauncher/arc_dns_injector/build/ && touch /home/runner/work/PojavLauncher/PojavLauncher/arc_dns_injector/build/version
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
