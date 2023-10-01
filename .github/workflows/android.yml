@@ -69,13 +69,14 @@ jobs:
         if: github.repository_owner == 'PojavLauncherTeam' && github.ref_name == 'v3_openjdk'
         run: |
           gradle :app_pojavlauncher:bundleGplay
-          mv app_pojavlauncher/build/outputs/bundle/gplay/app_pojavlauncher-gplay.aab out/app-gplay.aab
+          
 
       - name: Build Debug .apk
         run: |
           # Build the launcher
           gradle :app_pojavlauncher:assembleDebug
           ls -alhR
+          mv app_pojavlauncher/build/outputs/* out/app-debug
           
 
       - name: Build APK without runtime
@@ -87,13 +88,12 @@ jobs:
       - name: Gen md5sums
         run: |
           md5sum out/app-debug.apk > out/app-debug.md5
-          md5sum out/app-debug-noruntime.apk > out/app-debug-noruntime.md5
-          
+        
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
           name: app-debug
-          path: build/
+          path: out/*
       
       - name: Upload AAB
         uses: actions/upload-artifact@v3
