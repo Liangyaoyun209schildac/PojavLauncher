@@ -1,10 +1,15 @@
 name: Android CI
 
 on:
-  push:
-    branches: [ "v3_openjdk" ]
   pull_request:
-    branches: [ "v3_openjdk" ]
+    branches-ignore:
+      - 'l10n_v3_openjdk2'
+    types: [ opened, reopened ]
+  push:
+    branches-ignore:
+      - 'l10n_v3_openjdk2'
+  workflow_dispatch:
+
 
 jobs:
   build:
