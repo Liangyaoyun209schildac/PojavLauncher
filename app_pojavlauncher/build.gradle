@@ -1,13 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-
-    }
-    dependencies {
-
-    }
-}
-
 plugins {
     id 'com.android.application' version '7.4.2'
 }
@@ -61,7 +51,7 @@ def getVersionName = {
             return ("LOCAL-" + "${getDate()}")
         }else {
             // Used by github actions
-            TAG_STRING =  'dahlia-' + "${getDate()}" + "-" + TAG_PART_COMMIT.toString().trim()
+            TAG_STRING =  'edelweiss-' + "${getDate()}" + "-" + TAG_PART_COMMIT.toString().trim()
         }
 
     }
@@ -77,6 +67,17 @@ def getVersionName = {
     }
 
     return TAG_STRING.trim().replace("-g", "-") + "-" + BRANCH.toString().trim()
+}
+
+def getCFApiKey = {
+    String key = System.getenv("CURSEFORGE_API_KEY");
+    if(key != null) return key;
+    File curseforgeKeyFile = new File("./curseforge_key.txt");
+    if(curseforgeKeyFile.canRead() && curseforgeKeyFile.isFile()) {
+        return curseforgeKeyFile.text;
+    }
+    logger.warn('BUILD: You have no CurseForge key, the curseforge api will get disabled !');
+    return "DUMMY";
 }
 
 configurations {
@@ -96,36 +97,37 @@ android {
     }
 
     signingConfigs {
-//        customDebug {
-//            storeFile file("debug.keystore")
-//            storePassword "android"
-//            keyAlias "androiddebugkey"
-//            keyPassword "android"
-//        }
-//        googlePlayBuild {
-//            storeFile file("upload.jks")
-//            storePassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
-//            keyAlias "upload"
-//            keyPassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
-//        }
+        customDebug {
+            storeFile file("debug.keystore")
+            storePassword "android"
+            keyAlias "androiddebugkey"
+            keyPassword "android"
+        }
+        googlePlayBuild {
+            storeFile file("upload.jks")
+            storePassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+            keyAlias "upload"
+            keyPassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+        }
     }
 
     defaultConfig {
-        //applicationId "net.kdt.pojavview"
+        applicationId "net.kdt.pojavlaunch"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode getDateSeconds()
         versionName getVersionName()
         multiDexEnabled true //important
+        resValue 'string', 'curseforge_api_key', getCFApiKey()
     }
 
     buildTypes {
         debug {
-            //applicationIdSuffix '.debug'
+            applicationIdSuffix '.debug'
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            //signingConfig signingConfigs.customDebug
+            signingConfig signingConfigs.customDebug
             resValue 'string', 'application_package', 'net.kdt.pojavlaunch.debug'
             resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder.debug'
             resValue 'string', 'shareProviderAuthority', 'net.kdt.pojavlaunch.scoped.controlfolder.debug'
@@ -133,7 +135,7 @@ android {
         proguard {
             initWith debug
             minifyEnabled true
-            //shrinkResources true
+            shrinkResources true
         }
 
         release {
@@ -146,10 +148,10 @@ android {
             resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder'
             resValue 'string', 'application_package', 'net.kdt.pojavlaunch'
         }
-//        gplay {
-//            initWith release
-//            signingConfig signingConfigs.googlePlayBuild
-//        }
+        gplay {
+            initWith release
+            signingConfig signingConfigs.googlePlayBuild
+        }
     }
 
     ndkVersion = "25.2.9519653"
@@ -165,11 +167,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-//    bundle {
-//        language {
-//            enableSplit = false
-//        }
-//    }
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 
     packagingOptions {
         jniLibs {
@@ -180,10 +182,9 @@ android {
     buildToolsVersion = '33.0.2'
 }
 
-
 dependencies {
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
-    // implementation 'commons-codec:commons-codec:1.15'
+    implementation 'commons-codec:commons-codec:1.15'
     // implementation 'com.wu-man:android-bsf-api:3.1.3'
     implementation 'androidx.preference:preference:1.2.0'
     //implementation 'androidx.core:core:1.7.0'
@@ -200,15 +201,13 @@ dependencies {
     implementation 'com.github.Mathias-Boulay:android_gamepad_remapper:eb92e3a5bb'
     implementation 'com.github.Mathias-Boulay:virtual-joystick-android:cb7bf45ba5'
 
-    // https://mavenlibs.com/maven/dependency/io.netty/netty-all
-    implementation 'io.netty:netty-all:4.1.97.Final'
 
     // implementation 'com.intuit.sdp:sdp-android:1.0.5'
     // implementation 'com.intuit.ssp:ssp-android:1.0.5'
 
     implementation 'org.tukaani:xz:1.8'
     implementation 'com.github.PojavLauncherTeam:exp4j:60eaec6f78'
-    // implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.6.1'
+    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.6.1'
 
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
 
