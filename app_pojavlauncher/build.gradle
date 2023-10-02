@@ -111,7 +111,7 @@ android {
     }
 
     defaultConfig {
-        //applicationId "net.kdt.pojavview"
+        applicationId "net.kdt.pojavview"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode getDateSeconds()
@@ -198,7 +198,7 @@ dependencies {
     implementation 'com.github.Mathias-Boulay:android_gamepad_remapper:eb92e3a5bb'
     implementation 'com.github.Mathias-Boulay:virtual-joystick-android:cb7bf45ba5'
 
-    // https://mavenlibs.com/maven/dependency/io.netty/netty-all
+    // implementation 'https://mavenlibs.com/maven/dependency/io.netty/netty-all'
     implementation 'io.netty:netty-all:4.1.97.Final'
 
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
