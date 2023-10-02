@@ -96,7 +96,7 @@ public class JREUtils {
 
     public static void redirectAndPrintJRELog() {
 
-        Logger.appendToLog("Log starts here");
+        Log.v("jrelog","Log starts here");
         new Thread(new Runnable(){
             int failTime = 0;
             ProcessBuilder logcatPb;
@@ -135,7 +135,8 @@ public class JREUtils {
                 }
             }
         }).start();
-        Logger.appendToLog("Logcat thread started");
+        Log.i("jrelog-logcat","Logcat thread started");
+
     }
 
     public static void relocateLibPath(Runtime runtime) {
@@ -308,11 +309,6 @@ public class JREUtils {
             activity.runOnUiThread(() -> {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(activity);
                 dialog.setMessage(activity.getString(R.string.mcn_exit_title, exitCode));
-                dialog.setPositiveButton(R.string.main_open_logs, (p1, p2) -> {
-                    Tools.openFile(activity);
-
-                    //MainActivity.fullyExit();
-                });
                 dialog.show();
             });
         }

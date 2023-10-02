@@ -23,6 +23,7 @@ import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.JREUtils;
+import net.kdt.pojavlaunch.utils.LocaleUtils;
 import net.kdt.pojavlaunch.utils.MathUtils;
 
 import org.lwjgl.glfw.CallbackBridge;
@@ -55,7 +56,7 @@ public class JavaGUILauncherActivity extends BaseActivity implements View.OnTouc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new JREUtils();
+        PojavApplication.init(this);
 
         setContentView(R.layout.activity_java_gui_launcher);
 

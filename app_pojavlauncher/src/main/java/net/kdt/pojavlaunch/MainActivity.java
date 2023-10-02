@@ -43,6 +43,7 @@ import net.kdt.pojavlaunch.forgedisplay.SocketDisplay;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.services.GameService;
 import net.kdt.pojavlaunch.utils.JREUtils;
+import net.kdt.pojavlaunch.utils.LocaleUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
@@ -89,7 +90,7 @@ public class MainActivity extends BaseActivity implements ControlButtonMenuListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new JREUtils();
+        PojavApplication.init(this);
 
         minecraftProfile = new MinecraftProfile();
         Intent intent = getIntent();

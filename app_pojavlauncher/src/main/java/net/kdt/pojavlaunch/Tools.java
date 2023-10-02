@@ -68,7 +68,7 @@ import java.util.List;
 @SuppressWarnings("IOStreamConstructor")
 public final class Tools {
     public static final Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
-    public static String APP_NAME = "null";
+    public static String APP_NAME = "ColorMC";
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
     public static String NATIVE_LIB_DIR;
@@ -85,7 +85,6 @@ public final class Tools {
 
     public static String CTRLMAP_PATH;
     public static String CTRLDEF_FILE;
-    public static final int RUN_MOD_INSTALLER = 2050;
     private static RenderersList sCompatibleRenderers;
     /**
      * Since some constant requires the use of the Context object
@@ -129,7 +128,7 @@ public final class Tools {
 
         javaArgList.add(minecraftProfile.mainclass);
         javaArgList.addAll(Arrays.asList(minecraftProfile.gameArgs));
-        // ctx.appendlnToLog("full args: "+javaArgList.toString());
+
         return JREUtils.launchJavaVM(activity, runtime, minecraftProfile.gameDir, javaArgList);
     }
 
@@ -393,13 +392,6 @@ public final class Tools {
         }
     }
 
-    public static int getTotalDeviceMemory(Context ctx){
-        ActivityManager actManager = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
-        ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
-        actManager.getMemoryInfo(memInfo);
-        return (int) (memInfo.totalMem / 1048576L);
-    }
-
     public static int getDisplayFriendlyRes(int displaySideRes, float scaling){
         displaySideRes *= scaling;
         if(displaySideRes % 2 != 0) displaySideRes --;
@@ -417,24 +409,6 @@ public final class Tools {
         return fileName;
     }
 
-    /** Swap the main fragment with another */
-    public static void swapFragment(FragmentActivity fragmentActivity , Class<? extends Fragment> fragmentClass,
-                                    @Nullable String fragmentTag, boolean addCurrentToBackstack, @Nullable Bundle bundle) {
-        // When people tab out, it might happen
-        //TODO handle custom animations
-        FragmentTransaction transaction = fragmentActivity.getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.container_fragment, fragmentClass, bundle, fragmentTag);
-        if(addCurrentToBackstack) transaction.addToBackStack(null);
-
-        transaction.commit();
-    }
-
-    /** Remove the current fragment */
-    public static void removeCurrentFragment(FragmentActivity fragmentActivity){
-        fragmentActivity.getSupportFragmentManager().popBackStackImmediate();
-    }
-
     /** Display and return a progress dialog, instructing to wait */
     private static ProgressDialog getWaitingDialog(Context ctx){
         final ProgressDialog barrier = new ProgressDialog(ctx);
@@ -444,33 +418,6 @@ public final class Tools {
         barrier.show();
 
         return barrier;
-    }
-
-    /** Copy the mod file, and launch the mod installer activity */
-    public static void launchModInstaller(Activity activity, @NonNull Intent data){
-        final ProgressDialog alertDialog = getWaitingDialog(activity);
-
-        final Uri uri = data.getData();
-        alertDialog.setMessage(activity.getString(R.string.multirt_progress_caching));
-        sExecutorService.execute(() -> {
-            try {
-                final String name = getFileName(activity, uri);
-                final File modInstallerFile = new File(Tools.DIR_CACHE, name);
-                FileOutputStream fos = new FileOutputStream(modInstallerFile);
-                InputStream input = activity.getContentResolver().openInputStream(uri);
-                IOUtils.copy(input, fos);
-                input.close();
-                fos.close();
-                activity.runOnUiThread(() -> {
-                    alertDialog.dismiss();
-                    Intent intent = new Intent(activity, JavaGUILauncherActivity.class);
-                    intent.putExtra("modFile", modInstallerFile);
-                    activity.startActivity(intent);
-                });
-            }catch(IOException e) {
-                Tools.showError(activity, e);
-            }
-        });
     }
 
     public static String extractUntilCharacter(String input, String whatFor, char terminator) {

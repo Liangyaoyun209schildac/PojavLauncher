@@ -42,16 +42,6 @@ public class LauncherActivity extends BaseActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK) return;
-        if (requestCode == Tools.RUN_MOD_INSTALLER && data != null) {
-            Tools.launchModInstaller(this, data);
-            return;
-        }
-    }
-
-    @Override
     public void onAttachedToWindow() {
         LauncherPreferences.computeNotchSize(this);
     }

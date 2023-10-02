@@ -13,20 +13,21 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import net.kdt.pojavlaunch.tasks.AsyncAssetManager;
+import net.kdt.pojavlaunch.utils.JREUtils;
 
 public class PojavApplication {
 
-	private static final int REQUEST_STORAGE_REQUEST_CODE = 1;
-
 	public static final ExecutorService sExecutorService = new ThreadPoolExecutor(4, 4, 500, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
-	public static void Init(Context context) {
+	public static void init(Context context) {
+		new JREUtils();
+
 		Thread.setDefaultUncaughtExceptionHandler((thread, th) -> {
 			File crashFile = new File(Tools.DIR_GAME_HOME, "latestcrash.txt");
 			try {
 				// Write to file, since some devices may not able to show error
 				File crashHome = crashFile.getParentFile();
-				if(crashHome != null && !crashHome.exists() && !crashHome.mkdirs()) {
+				if (crashHome != null && !crashHome.exists() && !crashHome.mkdirs()) {
 					throw new IOException("Failed to create crash log home");
 				}
 				PrintStream crashStream = new PrintStream(crashFile);
@@ -49,13 +50,15 @@ public class PojavApplication {
 		Tools.DIR_CACHE = context.getCacheDir();
 		Tools.DEVICE_ARCHITECTURE = Architecture.getDeviceArchitecture();
 		//Force x86 lib directory for Asus x86 based zenfones
-		if(Architecture.isx86Device() && Architecture.is32BitsDevice()){
+		if (Architecture.isx86Device() && Architecture.is32BitsDevice()) {
 			String originalJNIDirectory = context.getApplicationInfo().nativeLibraryDir;
 			context.getApplicationInfo().nativeLibraryDir = originalJNIDirectory.substring(0,
 							originalJNIDirectory.lastIndexOf("/"))
 					.concat("/x86");
 		}
+	}
 
+	public static void unpack(Context context) {
 		AsyncAssetManager.unpackComponents(context);
 		AsyncAssetManager.unpackSingleFiles(context);
 	}

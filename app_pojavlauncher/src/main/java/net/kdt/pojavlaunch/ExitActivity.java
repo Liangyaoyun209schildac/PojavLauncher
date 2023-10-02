@@ -22,24 +22,18 @@ public class ExitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         int code = -1;
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            code = extras.getInt("code",-1);
+        if (extras != null) {
+            code = extras.getInt("code", -1);
         }
 
         new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.mcn_exit_title,code))
-                .setPositiveButton(R.string.main_open_logs, (p1, p2) -> {
-                    Tools.openFile(this);
-
-                    //MainActivity.fullyExit();
-                })
-                .setOnDismissListener(dialog -> ExitActivity.this.finish())
+                .setMessage(getString(R.string.mcn_exit_title, code))
                 .show();
     }
 
     public static void showExitMessage(Context ctx, int code) {
-        Intent i = new Intent(ctx,ExitActivity.class);
-        i.putExtra("code",code);
+        Intent i = new Intent(ctx, ExitActivity.class);
+        i.putExtra("code", code);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(i);
